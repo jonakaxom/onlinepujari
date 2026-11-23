@@ -1,0 +1,68 @@
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import * as fs from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import {firebaseConfig,APP_CHECK_SITE_KEY} from "./firebase-config.js";
+
+export const configured=!firebaseConfig.apiKey.startsWith("PASTE");
+export const F=fs;
+let app,auth,db;
+if(configured){
+  app=initializeApp(firebaseConfig);
+  if(APP_CHECK_SITE_KEY){
+    const m=await import("https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js");
+    m.initializeAppCheck(app,{provider:new m.ReCaptchaV3Provider(APP_CHECK_SITE_KEY),isTokenAutoRefreshEnabled:true});
+  }
+  auth=getAuth(app);db=fs.getFirestore(app);
+}
+export {auth,db};
+
+/* ---- safe DOM builder: text is ALWAYS inserted as text, never as HTML (prevents XSS) ---- */
+export function el(tag,props={},...kids){
+  const n=document.createElement(tag);
+  for(const [k,v] of Object.entries(props||{})){
+    if(v==null||v===false)continue;
+    if(k==="class")n.className=v;
+    else if(k.startsWith("on")&&typeof v==="function")n.addEventListener(k.slice(2),v);
+    else n.setAttribute(k,v===true?"":v);
+  }
+  for(const c of kids.flat())if(c!=null&&c!==false)n.append(c instanceof Node?c:document.createTextNode(String(c)));
+  return n;
+}
+export const $=s=>document.querySelector(s);
+export function notice(msg,kind="ok"){const b=$("#msg");if(!b)return;b.className="notice "+kind;b.textContent=msg;b.hidden=false;if(kind==="ok")setTimeout(()=>b.hidden=true,4000)}
+export const digits=s=>String(s||"").replace(/\D/g,"");
+export const waLink=(num,text)=>{const d=digits(num);return d.length>=10&&d.length<=15?`https://wa.me/${d.length===10?"91"+d:d}?text=${encodeURIComponent(text)}`:null};
+export const fmtDate=s=>{const d=new Date(s+"T00:00:00");return isNaN(d)?s:d.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})};
+export const tsMs=t=>t&&t.toMillis?t.toMillis():0;
+
+export async function signInGoogle(){return signInWithPopup(auth,new GoogleAuthProvider())}
+export async function logout(){await signOut(auth);location.href="login.html"}
+
+/* Resolves {user,profile,isAdmin}. Redirects to login.html when signed out or not onboarded. */
+export function requireUser({allow}={}){
+  return new Promise(res=>{
+    if(!configured){showSetup();return}
+    onAuthStateChanged(auth,async user=>{
+      if(!user){location.href="login.html";return}
+      const snap=await fs.getDoc(fs.doc(db,"users",user.uid));
+      if(!snap.exists()){location.href="login.html";return}
+      const profile=snap.data();
+      let isAdmin=false;
+      try{isAdmin=(await fs.getDoc(fs.doc(db,"admins",user.uid))).exists()}catch(e){}
+      const home=isAdmin?"admin.html":profile.role==="pandit"?"pandit.html":"dashboard.html";
+      if(allow&&!allow({profile,isAdmin})){location.href=home;return}
+      const who=$("#who");if(who)who.textContent=profile.name;
+      $("#logout")?.addEventListener("click",logout);
+      res({user,profile,isAdmin,home});
+    });
+  });
+}
+export function showSetup(){
+  const m=$("#app")||document.body;
+  m.replaceChildren(el("div",{class:"card"},el("h2",{},"Setup needed"),
+    el("p",{},"Open assets/js/firebase-config.js and paste your Firebase web app config. See docs/FIREBASE-SETUP.md.")));
+}
+export const STATUS_LABEL={pending:"Pending",accepted:"Accepted",declined:"Declined",completed:"Completed",cancelled:"Cancelled"};
+export const badge=s=>el("span",{class:"badge b-"+s},STATUS_LABEL[s]||s);
+export const LANGS=["Hindi","Tamil","Telugu","Kannada","Marathi","Bengali","Gujarati","Malayalam","Assamese","English","Sanskrit"];
+export async function loadPujas(){try{return await (await fetch(new URL("../data/pujas.json",import.meta.url))).json()}catch(e){return []}}
