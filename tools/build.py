@@ -143,6 +143,7 @@ def relink(h,d):
     attr,t,frag=m.group(1),m.group(2),m.group(3) or ""
     if t.endswith(".html"):n=dest(t)
     elif t in ASSET_MAP:n=ASSET_MAP[t]
+    elif t.startswith("assets/"):n=t
     else:return m.group(0)
     r=os.path.relpath(n,base)
     if r.endswith("index.html"):r=r[:-10] or "./"
@@ -151,14 +152,55 @@ def relink(h,d):
   return re.sub(re.escape(SITE)+r'/([a-z0-9-]+\.html)',lambda m:SITE+"/"+public(m.group(1)),h)
 
 DIYA='<svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><g class="flame-a"><path d="M16 1c3.2 4.2 4.4 6.4 4.4 9a4.4 4.4 0 0 1-8.8 0C11.6 7.4 12.8 5.2 16 1z" fill="#ffb703"/><path d="M16 6c1.5 2 2.2 3.2 2.2 4.4a2.2 2.2 0 0 1-4.4 0c0-1.2.7-2.4 2.2-4.4z" fill="#d9480f"/></g><path d="M2 17h28c0 6.5-6 12-14 12S2 23.500 2 17z" fill="#ffb703"/><path d="M2 17h28" stroke="#d9480f" stroke-width="1.6"/></svg>'
-ORN='<div class="orn" aria-hidden="true"><svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="17" cy="17" r="3"/><ellipse cx="17" cy="8" rx="3" ry="5"/><ellipse cx="17" cy="26" rx="3" ry="5"/><ellipse cx="8" cy="17" rx="5" ry="3"/><ellipse cx="26" cy="17" rx="5" ry="3"/></svg></div>'
+ORN='<div class="orn" aria-hidden="true"><img src="assets/img/lotus.svg" alt="" width="40" height="40" loading="lazy"></div>'
 def _i(p,sw="1.8"):return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{p}"/></svg>'
 CAT_ICO=[_i("M3 11l9-7 9 7 M5 10v10h14V10 M10 20v-6h4v6"),_i("M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6 M17 11a2.5 2.5 0 1 0 0-5 M21 19c0-2.5-1.5-4.5-4-5"),_i("M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"),_i("M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M3 12c0-2 4-3.5 9-3.5s9 1.5 9 3.5-4 3.5-9 3.5-9-1.5-9-3.5z M5 6l2 2 M19 18l-2-2"),_i("M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z M9 9.500c0-1 1.300-1.800 3-1.800s3 .8 3 1.800-1.300 1.600-3 2-3 1-3 2 1.300 1.800 3 1.800 3-.8 3-1.800 M12 6v1.700 M12 16.300V18"),_i("M12 3c2.500 3 3.500 5 3.500 7a3.500 3.500 0 0 1-7 0c0-2 1-4 3.500-7z M5 21h14 M7 17h10")]
 ICO_WA2='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21l1.600-4.600A8.500 8.500 0 1 1 8 19.600z"/><path d="M9 9.500c0 3 2.500 5.500 5.500 5.500l1-1.500-2-1-1 .8a4 4 0 0 1-1.800-1.800l.8-1-1-2z"/></svg>'
 ICO_UP='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>'
 STRIP=[("M3 12h18 M12 3c3 3 3 15 0 18 M12 3c-3 3-3 15 0 18 M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z",f"{len(LANGS)} languages","Hindi to Malayalam"),("M12 21s7-6.200 7-11a7 7 0 1 0-14 0c0 4.800 7 11 7 11z M12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",f"{len(CITYDATA)+len(METROS)+5}+ cities","Across India, or online"),("M4 5h7a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4z M20 5h-7a2 2 0 0 0-2 2",f"{len(S)} pujas","Pandit only or with samagri"),("M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6z M9 12l2 2 4-4","Pay after confirmation","Muhurat confirmed first")]
 STRIPH='<div class="strip"><ul>'+"".join(f'<li>{_i(p)}<span><b>{t}</b><small>{d}</small></span></li>' for p,t,d in STRIP)+'</ul></div>'
+
+BRS=" | Online Pujari"
+def fit_title(t):
+  core=t[:-len(BRS)] if t.endswith(BRS) else t
+  if len(core)+len(BRS)<=60:return core+BRS
+  if len(core)<=60:return core
+  c=core[:60];c=c[:c.rfind(" ")] if " " in c else c
+  for w in (" and"," for"," in"," to"," of"," with"," &"," –"," -",":",","):
+    while c.endswith(w):c=c[:-len(w)].rstrip()
+  return c
+def fit_desc(d):
+  if len(d)>160:
+    c=d[:160];k=max(c.rfind(". "),c.rfind("? "))
+    d=c[:k+1] if k>110 else c[:c.rfind(" ")].rstrip(" ,;:-")+"."
+  if len(d)<90:d=d.rstrip(".")+". Online Pujari arranges verified pandits for puja at home or online across India."
+  return d
+def related(path,_d):
+  if _d.startswith("pujas/") and path!="services.html":
+    i=[x[0] for x in S].index(path[:-5]);nm=S[i][1]
+    oth="".join(f'<a href="{S[(i+k)%len(S)][0]}.html">{S[(i+k)%len(S)][1]}</a>' for k in range(1,7))
+    cts="".join(f'<a href="pandit-in-{c[0]}.html">{c[1]}</a>' for f in FEATURED[:14] for c in CITYDATA if c[0]==f)
+    return f'<section class="soft"><div class="w"><h2>Related pujas</h2><div class="cityc plain">{oth}</div><h2>Book {nm} by city</h2><div class="cityc">{cts}<a href="locations.html">All cities</a></div></div></section>'
+  if _d.startswith("blog/") and path!="blog.html":
+    sl=path[:-5];a=[x for x in ARTS if x[0]==sl]
+    if not a:return ""
+    a=a[0];same=[x for x in ARTS if x[2]==a[2] and x[0]!=sl][:4] or [x for x in ARTS if x[0]!=sl][:4]
+    pj=[x for x in S if x[0]==a[7]]
+    r="".join(f'<a href="{x[0]}.html">{x[1].split(":")[0]}</a>' for x in same)
+    pl=f'<h2>Book a pandit</h2><div class="cityc plain"><a href="{pj[0][0]}.html">{pj[0][1]}</a><a href="pandit-booking.html">Book a pandit</a><a href="locations.html">Pandit in your city</a></div>' if pj else ""
+    return f'<section class="soft"><div class="w"><h2>Related reading</h2><div class="cityc plain">{r}</div>{pl}</div></section>'
+  return ""
 def page(path,title,desc,body,schema=None,home=False):
+  title=fit_title(title);desc=fit_desc(desc);_dd=dest(path)
+  if schema is None:
+    _nm=title.split(" | ")[0].split(":")[0]
+    if path.startswith(("pandit-in-","pandit-ji-in-")):schema={"@context":"https://schema.org","@type":"Service","name":_nm,"serviceType":"Pandit booking for puja, havan and sanskar","provider":org,"areaServed":{"@type":"Place","name":_nm.replace("Pandit in ","").replace("Pandit ji in ","")}}
+    elif _dd.startswith("languages/"):schema={"@context":"https://schema.org","@type":"Service","name":_nm,"serviceType":"Pandit booking for puja in your language","provider":org,"areaServed":{"@type":"Country","name":"India"},"availableLanguage":path.split("-")[0].title()}
+    elif _dd.startswith("pages/"):schema={"@context":"https://schema.org","@type":{"contact.html":"ContactPage","about.html":"AboutPage"}.get(path,"WebPage"),"name":_nm,"description":desc,"url":SITE+"/"+public(path),"inLanguage":"en-IN","isPartOf":{"@type":"WebSite","name":BRAND,"url":SITE}}
+    elif path=="services.html":schema={"@context":"https://schema.org","@type":"ItemList","name":"Pujas and sanskar you can book","itemListElement":[{"@type":"ListItem","position":i+1,"name":x[1],"url":SITE+"/"+public(x[0]+".html")} for i,x in enumerate(S)]}
+  rel=related(path,_dd)
+  OGT="article" if _dd.startswith("blog/") and path!="blog.html" else "website"
+  ROB="noindex,follow" if path=="404.html" else "index,follow,max-image-preview:large,max-snippet:-1"
   sc=f'<script type="application/ld+json">{json.dumps(schema,ensure_ascii=False)}</script>' if schema else ""
   url=SITE+"/"+public(path)
   _d=dest(path);_sec={"blog":("Blog","blog.html"),"pujas":("Pujas","services.html"),"locations":("Locations","locations.html"),"languages":("Languages","locations.html"),"pages":None}.get(_d.split("/")[0]) if "/" in _d else None
@@ -167,17 +209,17 @@ def page(path,title,desc,body,schema=None,home=False):
 
   nav="".join(f'<a href="{SITE if False else ""}{h}">{t}</a>' for h,t in [("services.html","Pujas"),("pandit-booking.html","Book Pandit"),("blog.html","Blog"),("festival-calendar-2026.html","Festival Dates"),("about.html","About"),("contact.html","Contact"),("login.html","Login")])
   h=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{e(title)}</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{url}">
-<meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:type" content="website"><meta property="og:url" content="{url}">
+<title>{e(title)}</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{url}"><link rel="alternate" hreflang="en-IN" href="{url}"><link rel="alternate" hreflang="x-default" href="{url}">
+<meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:type" content="{OGT}"><meta property="og:url" content="{url}">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://wa.me"><meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="theme-color" content="#2b1638"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1"><meta property="og:site_name" content="Online Pujari"><meta property="og:locale" content="en_IN"><meta property="og:image" content="{SITE}/assets/img/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{e(title)}"><meta name="twitter:description" content="{e(desc)}"><meta name="twitter:image" content="{SITE}/assets/img/og-image.png"><link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg"><link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png"><link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2b1638"><meta name="robots" content="{ROB}"><meta property="og:site_name" content="Online Pujari"><meta property="og:locale" content="en_IN"><meta property="og:image" content="{SITE}/assets/img/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{e(title)}"><meta name="twitter:description" content="{e(desc)}"><meta name="twitter:image" content="{SITE}/assets/img/og-image.png"><link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg"><link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png"><link rel="manifest" href="site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700&family=Eczar:wght@500;700&display=swap" rel="stylesheet">
 {FX if home else ""}<link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/enhance.css">{sc}{bc}</head><body><a class="skip" href="#main">Skip to content</a><div id="bar" aria-hidden="true"></div><div class="announce"><span>{e(ANNOUNCE[0])}</span><a href="{ANNOUNCE[2]}">{e(ANNOUNCE[1])}</a></div>
 <header class="top"><div class="w"><a class="logo" href="index.html">{DIYA}<span>Online<span>Pujari</span></span></a>
 <button class="menu" aria-expanded="false" aria-label="Menu">Menu</button><nav>{nav}</nav><a class="ph" href="tel:{PHONE.replace(" ","")}">{ICO_PH}<span class="pht">{PHONE}</span></a><a class="btn hd" href="book.html">Book Puja</a></div></header>
-<main id="main">{body}</main>
-<footer><div class="w"><div class="blurbs"><div><h3>Pandit ji near me</h3><p>Looking for a pandit near you? We arrange pandits for homes, societies, offices and shops across Noida, Greater Noida, Greater Noida West, Ghaziabad, Delhi and Gurugram. See every area on our <a href="locations.html">locations page</a>.</p></div>
+<main id="main">{body}{rel}</main>
+<div class="skyline" aria-hidden="true"></div><footer><div class="w"><div class="blurbs"><div><h3>Pandit ji near me</h3><p>Looking for a pandit near you? We arrange pandits for homes, societies, offices and shops across Noida, Greater Noida, Greater Noida West, Ghaziabad, Delhi and Gurugram. See every area on our <a href="locations.html">locations page</a>.</p></div>
 <div><h3>Muhurat and guidance</h3><p>Not sure which puja suits the occasion or when to hold it? Message us on WhatsApp and we will help you pick the right puja and a muhurat for Griha Pravesh, Mundan, Namkaran, a business opening or any ceremony.</p></div></div>
 <div class="cols6"><div><h3>Popular pujas</h3>{"".join(f'<a href="{x}.html">{n}</a>' for x,n in [("griha-pravesh-puja","Griha Pravesh Puja"),("satyanarayan-puja","Satyanarayan Katha"),("lakshmi-puja","Diwali Lakshmi Puja"),("annaprasan-puja","Annaprasan Sanskar"),("ganesh-puja","Ganesh Sthapana and Visarjan"),("rudrabhishek-puja","Rudrabhishek Puja"),("sundarkand-path","Sundarkand Path"),("new-car-puja","Vahan Pujan")])}</div>
 <div><h3>Pandit near you</h3>{"".join(f'<a href="{x}">{n}</a>' for x,n in [("locations.html","Pandit in Delhi NCR"),("pandit-ji-in-noida-greater-noida.html","Pandit in Noida"),("pandit-ji-in-noida-greater-noida.html","Pandit in Greater Noida"),("pandit-in-greater-noida-west.html","Pandit in Greater Noida West"),("pandit-in-ghaziabad.html","Pandit in Ghaziabad"),("pandit-in-delhi.html","Pandit in Delhi"),("pandit-in-gurugram.html","Pandit in Gurugram"),("locations.html","All locations")])}</div>
@@ -185,7 +227,7 @@ def page(path,title,desc,body,schema=None,home=False):
 <div><h3>Company</h3><a href="about.html">About us</a><a href="contact.html">Contact us</a><a href="faqs.html">FAQs</a><a href="become-a-pandit.html">Become a pandit</a><a href="blog.html">Blog</a><a href="puja-glossary.html">Puja glossary</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms and conditions</a><a href="refund.html">Refund policy</a></div>
 <div><h3>Latest blogs</h3>{"".join(f'<a href="{a_[0]}.html">{e(a_[1].split(":")[0])}</a>' for a_ in [x for x in ARTS if x[0] in ("diwali-date-lakshmi-puja-vidhi","nine-days-of-navratri-nine-forms-of-durga","ganesh-chaturthi-2026-visarjan","janmashtami-2026-date-puja-timing","krishna-quotes-hindi")])}</div>
 <div class="contact"><h3>Contact</h3><p>{ICO_PIN}<span>Your office address here</span></p><p>{ICO_PH}<a href="tel:{PHONE.replace(" ","")}">{PHONE}</a></p><p>{ICO_WA}<a href="https://wa.me/919999999999">{PHONE}</a></p><p>{ICO_ML}<a href="mailto:{EMAIL}">{EMAIL}</a></p></div></div>
-<div class="cities"><h3>Book puja in your city</h3><div class="cgrid">{"".join(f'<div><h4>{c[1]}</h4>'+"".join(f'<a href="pandit-in-{c[0]}.html#{l.lower()}">{LN[l][3]} in {c[1]} ({l})</a>' for l in c[2])+'</div>' for c in METROS)}<div><h4>Delhi NCR</h4><a href="locations.html">All Delhi NCR locations</a><a href="pandit-in-delhi.html">Pandit in Delhi</a><a href="pandit-in-gurugram.html">Pandit in Gurugram</a></div></div></div><ul class="trust2"><li>{ICO_OK}Muhurat confirmed before you pay</li><li>{ICO_LK}Pay only after pandit confirmation</li><li>{ICO_VD}Online puja from anywhere</li><li>{ICO_WA}Help on WhatsApp</li></ul>
+<div class="cities"><h3>Book puja in your city</h3><div class="cgrid">{"".join(f'<div><h4>{c[1]}</h4>'+"".join(f'<a href="pandit-in-{c[0]}.html#{l.lower()}">{LN[l][3]} in {c[1]} ({l})</a>' for l in c[2])+'</div>' for c in METROS)}<div><h4>Delhi NCR</h4><a href="locations.html">All Delhi NCR locations</a><a href="pandit-in-delhi.html">Pandit in Delhi</a><a href="pandit-in-gurugram.html">Pandit in Gurugram</a></div></div></div><div class="cities"><h3>Pandit by state</h3><div class="stl">{"".join(f'<a href="pandits-in-{k}.html">{v[0]}</a>' for k,v in STATES.items() if any(c[2]==k for c in CITYDATA))}</div></div><ul class="trust2"><li>{ICO_OK}Muhurat confirmed before you pay</li><li>{ICO_LK}Pay only after pandit confirmation</li><li>{ICO_VD}Online puja from anywhere</li><li>{ICO_WA}Help on WhatsApp</li></ul>
 <div class="base"><span>© {datetime.date.today().year} {BRAND} (onlinepujari.in). All rights reserved.</span><span><a href="locations.html">All locations</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="refund.html">Refund</a></span></div></div></footer>
 <div class="sticky"><a class="btn" href="book.html">Book a pandit</a><a class="btn alt" href="tel:+919999999999">Call</a></div><div class="toast" id="toast"><span>{e(ANNOUNCE[0])}</span><a class="btn alt" data-wa="Namaste, I need help choosing a puja and muhurat." href="book.html">Ask us</a><button aria-label="Dismiss" id="tx">×</button></div><div class="fab"><button class="up" id="up" type="button" aria-label="Back to top">{ICO_UP}</button><a class="wa" data-wa="Namaste, I need help with a puja booking." href="book.html" aria-label="Chat on WhatsApp">{ICO_WA2}</a></div><script src="assets/app.js"></script><script src="assets/enhance.js" defer></script></body></html>'''
   d=dest(path);os.makedirs(os.path.dirname(d) or ".",exist_ok=True)
@@ -196,10 +238,10 @@ HOW='''<ol class="steps"><li><h3>Choose your puja</h3>Pick the puja, city and da
 org={"@context":"https://schema.org","@type":"Organization","name":BRAND,"url":SITE,"email":EMAIL,"telephone":PHONE}
 # HOME
 rot=json.dumps([f"{l[1]} {l[2]}" for l in LANGS],ensure_ascii=False)
-home=f'''<section class="hero toran"><div class="mandala" aria-hidden="true"></div><div class="w"><div><p class="dev" id="rot" data-w='{e(rot)}'>{LANGS[0][1]} {LANGS[0][2]}</p><h1>Your puja, done right, in your own language</h1>
+home=f'''<section class="hero toran"><div class="mandala" aria-hidden="true"></div><span class="petals" aria-hidden="true"><i style="--x:4%;--d:12s;--w:0px;--l:-10s"></i><i style="--x:13%;--d:15s;--w:0px;--l:-7s"></i><i style="--x:22%;--d:16s;--w:0px;--l:-4s"></i><i style="--x:28%;--d:11s;--w:30px;--l:-12s"></i><i style="--x:37%;--d:10s;--w:30px;--l:-4s"></i><i style="--x:49%;--d:16s;--w:0px;--l:-11s"></i><i style="--x:57%;--d:13s;--w:30px;--l:-1s"></i><i style="--x:63%;--d:17s;--w:0px;--l:-2s"></i><i style="--x:78%;--d:14s;--w:-30px;--l:-7s"></i><i style="--x:84%;--d:9s;--w:30px;--l:-1s"></i><i style="--x:0%;--d:17s;--w:30px;--l:-12s"></i></span><div class="w"><div><p class="dev" id="rot" data-w='{e(rot)}'>{LANGS[0][1]} {LANGS[0][2]}</p><h1>Your puja, done right, in your own language</h1>
 <p class="lead">Tell us the puja, your city and the language you pray in. We match a verified pandit, confirm the muhurat and you pay only after confirmation.</p>
 <ul class="facts"><li>Pandits for Hindi, Tamil, Telugu, Kannada, Marathi, Bengali, Gujarati and Malayalam</li><li>Home, society hall, office, temple or online</li><li>Pandit only, or pandit with the full samagri kit</li></ul>
-<p class="ctas"><a class="btn alt" href="book.html">Book your puja</a><a class="btn ghost2" data-wa="Namaste, please call me back about a puja booking." href="book.html">Request a callback</a></p></div>{form()}</div></section>
+<p class="ctas"><a class="btn alt" href="book.html">Book your puja</a><a class="btn ghost2" data-wa="Namaste, please call me back about a puja booking." href="book.html">Request a callback</a></p></div>{form()}</div><div class="diyas" aria-hidden="true"><svg viewBox="0 0 32 32" style="--i:0"><g class="flame-a"><path d="M16 3c3 4 4 6 4 8a4 4 0 0 1-8 0c0-2 1-4 4-8z" fill="#ffb703"/><path d="M16 8c1.300 1.800 2 2.800 2 3.800a2 2 0 0 1-4 0c0-1 .7-2 2-3.800z" fill="#d9480f"/></g><path d="M3 18h26c0 6-5.500 10-13 10S3 24 3 18z" fill="#ffb703"/></svg><svg viewBox="0 0 32 32" style="--i:1"><g class="flame-a"><path d="M16 3c3 4 4 6 4 8a4 4 0 0 1-8 0c0-2 1-4 4-8z" fill="#ffb703"/><path d="M16 8c1.300 1.800 2 2.800 2 3.800a2 2 0 0 1-4 0c0-1 .7-2 2-3.800z" fill="#d9480f"/></g><path d="M3 18h26c0 6-5.500 10-13 10S3 24 3 18z" fill="#ffb703"/></svg><svg viewBox="0 0 32 32" style="--i:2"><g class="flame-a"><path d="M16 3c3 4 4 6 4 8a4 4 0 0 1-8 0c0-2 1-4 4-8z" fill="#ffb703"/><path d="M16 8c1.300 1.800 2 2.800 2 3.800a2 2 0 0 1-4 0c0-1 .7-2 2-3.800z" fill="#d9480f"/></g><path d="M3 18h26c0 6-5.500 10-13 10S3 24 3 18z" fill="#ffb703"/></svg><svg viewBox="0 0 32 32" style="--i:3"><g class="flame-a"><path d="M16 3c3 4 4 6 4 8a4 4 0 0 1-8 0c0-2 1-4 4-8z" fill="#ffb703"/><path d="M16 8c1.300 1.800 2 2.800 2 3.800a2 2 0 0 1-4 0c0-1 .7-2 2-3.800z" fill="#d9480f"/></g><path d="M3 18h26c0 6-5.500 10-13 10S3 24 3 18z" fill="#ffb703"/></svg><svg viewBox="0 0 32 32" style="--i:4"><g class="flame-a"><path d="M16 3c3 4 4 6 4 8a4 4 0 0 1-8 0c0-2 1-4 4-8z" fill="#ffb703"/><path d="M16 8c1.300 1.800 2 2.800 2 3.800a2 2 0 0 1-4 0c0-1 .7-2 2-3.800z" fill="#d9480f"/></g><path d="M3 18h26c0 6-5.500 10-13 10S3 24 3 18z" fill="#ffb703"/></svg><svg viewBox="0 0 32 32" style="--i:5"><g class="flame-a"><path d="M16 3c3 4 4 6 4 8a4 4 0 0 1-8 0c0-2 1-4 4-8z" fill="#ffb703"/><path d="M16 8c1.300 1.800 2 2.800 2 3.800a2 2 0 0 1-4 0c0-1 .7-2 2-3.800z" fill="#d9480f"/></g><path d="M3 18h26c0 6-5.500 10-13 10S3 24 3 18z" fill="#ffb703"/></svg><svg viewBox="0 0 32 32" style="--i:6"><g class="flame-a"><path d="M16 3c3 4 4 6 4 8a4 4 0 0 1-8 0c0-2 1-4 4-8z" fill="#ffb703"/><path d="M16 8c1.300 1.800 2 2.800 2 3.800a2 2 0 0 1-4 0c0-1 .7-2 2-3.800z" fill="#d9480f"/></g><path d="M3 18h26c0 6-5.500 10-13 10S3 24 3 18z" fill="#ffb703"/></svg><svg viewBox="0 0 32 32" style="--i:7"><g class="flame-a"><path d="M16 3c3 4 4 6 4 8a4 4 0 0 1-8 0c0-2 1-4 4-8z" fill="#ffb703"/><path d="M16 8c1.300 1.800 2 2.800 2 3.800a2 2 0 0 1-4 0c0-1 .7-2 2-3.800z" fill="#d9480f"/></g><path d="M3 18h26c0 6-5.500 10-13 10S3 24 3 18z" fill="#ffb703"/></svg><svg viewBox="0 0 32 32" style="--i:8"><g class="flame-a"><path d="M16 3c3 4 4 6 4 8a4 4 0 0 1-8 0c0-2 1-4 4-8z" fill="#ffb703"/><path d="M16 8c1.300 1.800 2 2.800 2 3.800a2 2 0 0 1-4 0c0-1 .7-2 2-3.800z" fill="#d9480f"/></g><path d="M3 18h26c0 6-5.500 10-13 10S3 24 3 18z" fill="#ffb703"/></svg></div></section>
 {STRIPH}
 <section><div class="w">{ORN}<h2 class="c">Our promise</h2><ul class="promise">{"".join(f"<li>{ico2(p)}<span>{t}</span></li>" for t,p in PROMISE)}</ul></div></section>
 <section class="soft" id="categories"><div class="w"><h2>Which puja do you need help with?</h2><p style="color:var(--mut)">Start with what you want to achieve. Each group lists the pujas that fit.</p><div class="cats">{"".join(f'<div class="cat c{i}"><span class="g">{hi}</span><span class="ci">{CAT_ICO[i]}</span><h3>{t}</h3><ul>{"".join(f"<li><a href={chr(34)}{u}.html{chr(34)}>{n}</a></li>" for u,n in items)}</ul></div>' for i,(t,hi,items) in enumerate(CATS))}</div></div></section>
@@ -257,7 +299,7 @@ for a in ARTS:
 {"".join(f'<h2 id="s{i}">{e(h)}</h2>{b}' for i,(h,b) in enumerate(secs))}{rel(slug)}
 <div class="cta"><h3>Need a pandit for this?</h3><p>{e(sv[1])} from ₹{sv[5]:,}. Verified pandit, muhurat confirmed before you pay.</p><a class="btn" href="{sv[0]}.html">See {e(sv[1])}</a></div></article>
 <aside>{form(sv[1])}</aside></div></section><section class="soft"><div class="w"><h2>More guides</h2><div class="list">{more}</div></div></section>'''
-  sch={"@context":"https://schema.org","@graph":[{"@type":"Article","headline":title,"description":desc,"dateModified":today,"author":org,"publisher":org,"mainEntityOfPage":SITE+"/"+slug+".html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":SITE+"/"},{"@type":"ListItem","position":2,"name":"Blog","item":SITE+"/blog.html"},{"@type":"ListItem","position":3,"name":title}]}]}
+  sch={"@context":"https://schema.org","@graph":[{"@type":"Article","headline":title,"inLanguage":"en-IN","image":SITE+"/assets/img/og-image.png","description":desc,"dateModified":today,"author":org,"publisher":org,"mainEntityOfPage":SITE+"/"+slug+".html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":SITE+"/"},{"@type":"ListItem","position":2,"name":"Blog","item":SITE+"/blog.html"},{"@type":"ListItem","position":3,"name":title}]}]}
   page(slug+".html",title+" | Online Pujari",desc,body,sch)
 # GLOSSARY (every keyword that did not fit a page above)
 g=sorted(set(MAP["puja-glossary"]),key=str.lower);by=collections.defaultdict(list)
@@ -290,3 +332,15 @@ open("robots.txt","w").write(f"User-agent: *\nAllow: /\nDisallow: /account/\nSit
 open(".nojekyll","w").write("")
 json.dump([[x[0],x[1]] for x in S],open("assets/data/pujas.json","w",encoding="utf-8"),ensure_ascii=False)
 print(len(urls)+2,"pages built")
+
+open("llms.txt","w",encoding="utf-8").write(f"""# Online Pujari
+> Book verified pandits for puja, havan and sanskar at home or online in {len(CITYDATA)+len(METROS)+5}+ Indian cities, in Hindi, Tamil, Telugu, Kannada, Marathi, Bengali, Gujarati and Malayalam. Muhurat is confirmed before you pay.
+
+## Key pages
+- [All pujas and prices]({SITE}/pujas/)
+- [Book a pandit]({SITE}/pages/pandit-booking.html)
+- [Cities and states]({SITE}/locations/)
+- [Festival dates 2026]({SITE}/pages/festival-calendar-2026.html)
+- [Blog: festival and puja guides]({SITE}/blog/)
+- [FAQs]({SITE}/pages/faqs.html)
+""")

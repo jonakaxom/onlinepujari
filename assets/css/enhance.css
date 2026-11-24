@@ -82,3 +82,44 @@ input:focus,select:focus,textarea:focus{border-color:#7c3aed}
 .cityc a:hover{background:var(--dusk);color:#fff;border-color:var(--dusk)}
 p.c{text-align:center}
 .prose .steps{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+
+/* ===== art layer: skyline, petals, diya row, lotus, emoji accents (all decorative) ===== */
+.orn{max-width:260px}.orn:before,.orn:after{background:linear-gradient(90deg,transparent,var(--gold))}
+.orn img{width:40px;height:40px;flex:none}
+.skyline{height:70px;margin-top:60px;background:url(../img/skyline-dusk.svg) center bottom/1200px 70px repeat-x}
+.page-h{position:relative;overflow:hidden;background-image:url(../img/skyline.svg),radial-gradient(circle at 85% 0,#ffb70333,transparent 50%);background-repeat:repeat-x,no-repeat;background-position:center bottom -22px,0 0;background-size:1200px 100px,auto;padding-bottom:70px}
+.page-h .w{position:relative;z-index:1}
+.page-h:after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;background:url(../img/mandala.svg) center/contain no-repeat;opacity:.35;pointer-events:none}
+.page-h h1:before{content:"🪔 "/"";font-size:.8em}
+.hero{overflow:hidden}
+.diyas{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-around;pointer-events:none;opacity:.9;padding:0 2%}
+.diyas svg{width:34px;height:34px;filter:drop-shadow(0 0 10px #ffb703aa)}
+.diyas svg:nth-child(even){transform:translateY(-6px) scale(.85)}
+.diyas svg .flame-a{animation-delay:calc(var(--i)*.37s)}
+.hero .w{padding-bottom:30px}
+.petals{position:absolute;inset:0;overflow:hidden;pointer-events:none;display:none}
+@media(prefers-reduced-motion:no-preference){.petals{display:block}
+.petals i{position:absolute;top:-24px;left:var(--x);width:11px;height:15px;background:radial-gradient(circle at 30% 30%,#ffd166,#f77f00);border-radius:80% 0 80% 0;opacity:.75;animation:fall var(--d) linear infinite;animation-delay:var(--l)}
+@keyframes fall{0%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(var(--w),380px,0) rotate(200deg)}100%{transform:translate3d(calc(var(--w)*-1),780px,0) rotate(400deg)}}}
+
+/* emoji accents: decorative only, hidden from screen readers via empty alt text */
+.cityc a:before{content:"📍"/"";margin-right:6px}
+.cityc a[href^="pandits-in-"]:before,.cityc a[href*="/pandits-in-"]:before{content:"🛕"/""}
+.strip b:after{content:none}
+section h2.c:after{content:"✦";display:block;color:var(--gold);font-size:.8rem;letter-spacing:6px;margin-top:6px}
+.prose h2:before{content:"✦ "/"";color:var(--saf);font-size:.7em;vertical-align:.15em}
+.cat h3:after{content:" 🌼"/"";font-size:.9em}
+.promise li h3:before,.promise li b:before{content:none}
+details summary:before{content:"🙏 "/""}
+footer h3:before{content:"🪔 "/"";font-size:.9em}
+.fab .wa:after{content:none}
+a.btn:not(.ghost):not(.ghost2):not(.sm)[href*="book"]:after{content:" 🪔"/"";margin-left:4px}
+
+/* login card art */
+.login{background:var(--bg) url(../img/mandala.svg) right -80px top -80px/260px no-repeat}
+@media(max-width:700px){.diyas svg:nth-child(n+7){display:none}.page-h:after{width:170px;height:170px}.skyline{height:46px;background-size:800px 46px}}
+.page-h p{color:#e6daf1!important}
+.page-h .crumbs,.page-h .crumbs a{color:#ffd166}
+.cityc.plain a:before{content:none}
+.stl{display:flex;flex-wrap:wrap;gap:4px 18px}.stl a{color:#e9ddf3;min-height:32px;display:inline-flex;align-items:center}
+.cities>h3+.stl{margin-top:8px}
