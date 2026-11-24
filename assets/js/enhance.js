@@ -7,3 +7,8 @@ else{const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x
   els.forEach((e,i)=>{e.classList.add('rv');e.style.transitionDelay=(i%4)*60+'ms';io.observe(e)})}
 const up=document.getElementById('up');
 if(up){addEventListener('scroll',()=>up.classList.toggle('on',scrollY>700),{passive:true});up.addEventListener('click',()=>scrollTo({top:0,behavior:reduce?'auto':'smooth'}))}
+// tabs (puja flow), festival chips, listing filter, mobile book bar
+document.querySelectorAll('[data-tabs]').forEach(w=>{const bs=[...w.querySelectorAll('.tl button')];bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.setAttribute('aria-selected',x===b));w.querySelectorAll('[data-p]').forEach(p=>p.hidden=p.dataset.p!==b.dataset.t)}))});
+(()=>{const t=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);let first=true;
+ document.querySelectorAll('#fch li[data-d],table.fest tr[data-d]').forEach(x=>{if(x.dataset.d<t)x.classList.add('past');else if(!x.dataset.n){const k=x.closest('table')?'t':'c';if(!document.querySelector('.next[data-k="'+k+'"]')){x.classList.add('next');x.dataset.k=k}}})})();
+document.querySelectorAll('[data-open-form]').forEach(a=>a.addEventListener('click',e=>{const f=document.querySelector('aside form.book,form.book');if(f){e.preventDefault();f.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});const i=f.querySelector('input,select');i&&i.focus({preventScroll:true})}}));

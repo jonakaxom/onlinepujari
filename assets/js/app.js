@@ -10,7 +10,7 @@ document.querySelectorAll('form.book').forEach(f=>{
   f.addEventListener('click',e=>{if(e.target.matches('[data-next]')&&ok())show(n+1);if(e.target.matches('[data-back]'))show(n-1)});
   f.addEventListener('change',e=>{if(e.target.name==='puja')setTimeout(()=>show(2),150)});
   f.addEventListener('submit',e=>{e.preventDefault();if(!ok())return;const v=Object.fromEntries(new FormData(f));
-    const t=encodeURIComponent(`Namaste Online Pujari 🙏\nPuja: ${v.puja}\nMode: ${v.mode}\nLanguage: ${v.lang}\nCity: ${v.city}\nDate: ${v.help?'Help me find an auspicious date':(v.date||'Flexible')}\nName: ${v.name}\nPhone: ${v.phone}`);
+    const t=encodeURIComponent(`Namaste Online Pujari 🙏\nPuja: ${v.puja}\nFor: ${v.pkg||'-'}\nMode: ${v.mode}\nLanguage: ${v.lang}\nCity: ${v.city}\nDate: ${v.help?'Help me find an auspicious date':(v.date||'Flexible')}\nName: ${v.name}\nGotra: ${v.gotra||'-'}\nPhone: ${v.phone}`);
     window.open(`https://wa.me/${WA}?text=${t}`,'_blank','noopener');});
 });
 const bar=document.getElementById('bar');addEventListener('scroll',()=>{const h=document.documentElement;bar.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight||1)*100)+'%'},{passive:true});

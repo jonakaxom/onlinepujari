@@ -24,3 +24,7 @@ tools/       build.py, build_accounts.py, blog_data.py, data/keywords.csv, data/
 - Replace the WhatsApp number in `assets/js/app.js` and PHONE/EMAIL in `tools/build.py`.
 - Login/dashboards: follow `docs/FIREBASE-SETUP.md`.
 - Custom domain later: add a `CNAME` file containing the domain, set DNS A records, enable Enforce HTTPS.
+
+
+## Account area
+`account/login.html`, `dashboard.html` (customer), `pandit.html`, `admin.html` (approvals, bookings, users, audit log). Shared kit: `assets/js/ui.js`, styles `assets/css/dash.css`. Security headers: `vercel.json` / `_headers`. See `docs/FIREBASE-SETUP.md` and `docs/SECURITY.md`.

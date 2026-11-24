@@ -1,32 +1,24 @@
-# Login + dashboards: setup (all on the free Spark plan)
+# Firebase setup (free Spark plan)
 
-## 1. Firebase project
-1. https://console.firebase.google.com > Add project (decline Analytics). Do NOT upgrade to Blaze.
-2. Build > Authentication > Get started > Sign-in method > enable **Google**.
-3. Authentication > Settings > **Authorized domains**: add `<username>.github.io` (and `onlinepujari.in` after you buy it).
-4. Build > Firestore Database > Create database > production mode > region `asia-south1` (Mumbai).
-5. Firestore > **Rules** tab > paste the whole file `firebase/firestore.rules` > Publish.
-6. Project settings > Your apps > Web (</>) > register app > copy config into `assets/js/firebase-config.js`.
+1. **Create project** at console.firebase.google.com (no billing needed).
+2. **Authentication → Sign-in method → Google → Enable.**
+3. **Authentication → Settings → Authorized domains → Add** `onlinepujari.vercel.app` (and your own domain later, plus `localhost` if testing).
+4. **Firestore Database → Create** (production mode, region `asia-south1`).
+5. **Firestore → Rules:** paste the whole of `firebase/firestore.rules` and **Publish**. Republish every time this file changes.
+6. **Project settings → Your apps → Web app:** copy the config into `assets/js/firebase-config.js`. Never overwrite your own copy when you unzip a new version.
+7. **Restrict the API key** (Google Cloud Console → APIs & Services → Credentials): HTTP referrers = your site domains only.
+8. Optional but recommended: **App Check** with reCAPTCHA v3; put the site key in `APP_CHECK_SITE_KEY`.
 
-## 2. Make yourself admin (only way, by design)
-1. Open the site, go to account/login.html, sign in with Google once, create your account.
-2. Firebase console > Authentication > Users > copy your **User UID**.
-3. Firestore > Start collection `admins` > Document ID = your UID > add any field (e.g. `ok: true`) > Save.
-4. Log in again: you are sent to account/admin.html.
+## Who approves pandits?  You (the admin)
 
-## 3. Pandit flow
-Pandit logs in > chooses "Pandit" > fills profile > status "Waiting for approval".
-You open account/admin.html > Pandits > Approve. Now customers can choose that pandit.
+1. Open `account/login.html` and sign in with your Google account once (choose "Customer"). This creates your user record.
+2. Firebase console → Authentication → Users → copy your **User UID**.
+3. Firestore → **Start collection** `admins` → Document ID = your UID → add one field, e.g. `active` (boolean) = true. Save.
+4. Sign in again. You are sent to `account/admin.html`.
 
-## 4. Security hardening checklist
-- [ ] firestore.rules published (without it the database is open or locked)
-- [ ] Authorized domains list contains only your own domains
-- [ ] Firebase config API key: Google Cloud console > APIs & Services > Credentials > restrict the Browser key to HTTP referrers `https://<username>.github.io/*` and `https://onlinepujari.in/*`
-- [ ] App Check (free): Firebase console > App Check > register web app with reCAPTCHA v3, put the site key in `APP_CHECK_SITE_KEY`, then click Enforce for Firestore and Authentication
-- [ ] Stay on the Spark plan (it cannot bill you; abuse can only pause the service)
-- [ ] GitHub: enable 2FA, turn on branch protection for `main`, enable Dependabot/secret scanning
-- [ ] Never commit admin passwords/service-account JSON; none are needed in this project
-- [ ] Domain (later): enable registrar lock + DNSSEC, turn on Enforce HTTPS in Pages
+Flow: pandit signs up → fills profile at `account/pandit.html` (saved as *unapproved*, hidden from customers) → you open **Admin → Approvals**, check the details, then **Approve** or **Request changes** (with a note the pandit sees). **Revoke** hides a pandit again. Every action is written to the **Audit log**, which nobody can edit.
 
-## 5. Local test
-`python3 -m http.server 8000` then open http://localhost:8000/account/login.html (add `localhost` to Authorized domains).
+Admin rights can only be given by creating the `admins/<uid>` document in the console. No one can make themselves admin from the website.
+
+## Pages
+`account/login.html` · `account/dashboard.html` (customer) · `account/pandit.html` · `account/admin.html`

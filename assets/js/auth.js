@@ -25,7 +25,7 @@ export function el(tag,props={},...kids){
     else if(k.startsWith("on")&&typeof v==="function")n.addEventListener(k.slice(2),v);
     else n.setAttribute(k,v===true?"":v);
   }
-  for(const c of kids.flat())if(c!=null&&c!==false)n.append(c instanceof Node?c:document.createTextNode(String(c)));
+  for(const c of kids.flat(Infinity))if(c!=null&&c!==false)n.append(c instanceof Node?c:document.createTextNode(String(c)));
   return n;
 }
 export const $=s=>document.querySelector(s);
@@ -35,6 +35,7 @@ export const waLink=(num,text)=>{const d=digits(num);return d.length>=10&&d.leng
 export const fmtDate=s=>{const d=new Date(s+"T00:00:00");return isNaN(d)?s:d.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})};
 export const tsMs=t=>t&&t.toMillis?t.toMillis():0;
 
+export const onUser=cb=>onAuthStateChanged(auth,cb);
 export async function signInGoogle(){return signInWithPopup(auth,new GoogleAuthProvider())}
 export async function logout(){await signOut(auth);location.href="login.html"}
 
