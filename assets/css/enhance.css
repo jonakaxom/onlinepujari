@@ -75,3 +75,10 @@ nav a.pill:hover{background:#fff;color:#20152b}
 input,select,textarea{min-height:44px}
 input:focus,select:focus,textarea:focus{border-color:#7c3aed}
 .toast{display:none!important}
+
+/* city chips */
+.cityc{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:18px 0}
+.cityc a{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border:1.5px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink);text-decoration:none;font-weight:600;transition:background .15s,color .15s,border-color .15s}
+.cityc a:hover{background:var(--dusk);color:#fff;border-color:var(--dusk)}
+p.c{text-align:center}
+.prose .steps{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
