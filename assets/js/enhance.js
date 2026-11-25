@@ -12,3 +12,5 @@ document.querySelectorAll('[data-tabs]').forEach(w=>{const bs=[...w.querySelecto
 (()=>{const t=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);let first=true;
  document.querySelectorAll('#fch li[data-d],table.fest tr[data-d]').forEach(x=>{if(x.dataset.d<t)x.classList.add('past');else if(!x.dataset.n){const k=x.closest('table')?'t':'c';if(!document.querySelector('.next[data-k="'+k+'"]')){x.classList.add('next');x.dataset.k=k}}})})();
 document.querySelectorAll('[data-open-form]').forEach(a=>a.addEventListener('click',e=>{const f=document.querySelector('aside form.book,form.book');if(f){e.preventDefault();f.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});const i=f.querySelector('input,select');i&&i.focus({preventScroll:true})}}));
+// hero search -> services page prefill
+(()=>{const q=new URLSearchParams(location.search).get('q'),i=document.querySelector('[data-search]');if(q&&i){i.value=q;i.dispatchEvent(new Event('input'))}})();

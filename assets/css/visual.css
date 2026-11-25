@@ -1,6 +1,6 @@
 /* Visual layer: gradients, hero art, text styles, cards. Layered after enhance.css. Decorative only; content stays readable without it. */
 :root{--g1:#ff7a3c;--g2:#ffb703;--g3:#7c3aed;--h:285;--card:#fff;--shadow:0 12px 34px #2b163824}
-@media(prefers-color-scheme:dark){:root{--card:#231433;--shadow:0 12px 34px #0006}}
+:root[data-theme="dark"]{--card:#231433;--shadow:0 12px 34px #0006}
 body{background:var(--bg)}
 /* ---------- hero by page type ---------- */
 .page-h{background-image:url(../img/skyline.svg),radial-gradient(circle at 85% 0,#ffb70355,transparent 55%),linear-gradient(135deg,hsl(var(--h) 52% 14%) 0%,hsl(calc(var(--h) + 18) 48% 22%) 55%,hsl(calc(var(--h) - 30) 60% 26%) 100%);background-repeat:repeat-x,no-repeat,no-repeat;background-position:center bottom -22px,0 0,0 0;background-size:1200px 100px,auto,auto;padding:54px 0 84px}
@@ -14,7 +14,7 @@ body{background:var(--bg)}
 .page-h h1:before{-webkit-text-fill-color:initial}
 .page-h .crumbs{display:inline-flex;flex-wrap:wrap;gap:4px;padding:6px 14px;border-radius:999px;background:#ffffff14;backdrop-filter:blur(4px);margin-bottom:14px}
 /* ---------- content text styles ---------- */
-.prose>p:first-of-type:first-letter{font:700 3.4em/.85 Eczar,serif;float:left;padding:6px 10px 0 0;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
 .prose h2{position:relative;padding-bottom:.35em;margin-top:1.6em}
 .prose h2:after{content:"";position:absolute;left:0;bottom:0;width:72px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--g1),var(--g2))}
 .prose h2:before{content:"✦ "/"";background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}

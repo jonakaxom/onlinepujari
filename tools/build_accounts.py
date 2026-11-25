@@ -9,7 +9,7 @@ CSP=CSP
 def page(fn,title,js):
     open("account/"+fn,"w",encoding="utf-8").write(f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title} | Online Pujari</title><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="{CSP}"><meta name="theme-color" content="#2b1638">
+<meta http-equiv="Content-Security-Policy" content="{CSP}"><meta name="theme-color" content="#fff7ec"><meta name="color-scheme" content="light dark"><script src="../assets/js/theme.js"></script>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700&family=Eczar:wght@500;700&display=swap" rel="stylesheet">

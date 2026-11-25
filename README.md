@@ -28,3 +28,6 @@ tools/       build.py, build_accounts.py, blog_data.py, data/keywords.csv, data/
 
 ## Account area
 `account/login.html`, `dashboard.html` (customer), `pandit.html`, `admin.html` (approvals, bookings, users, audit log). Shared kit: `assets/js/ui.js`, styles `assets/css/dash.css`. Security headers: `vercel.json` / `_headers`. See `docs/FIREBASE-SETUP.md` and `docs/SECURITY.md`.
+
+## Theme
+Light mode is the default. The sun/moon button saves the choice in the visitor's browser (`assets/js/theme.js`). Tokens live in `assets/css/v2.css` (public) and `assets/css/dash.css` (accounts); dark overrides use `:root[data-theme="dark"]`.

@@ -2,7 +2,7 @@
 # so that every indexable page carries 700+ words. Wording is varied per page (hash-picked variants) and
 # only uses facts already on the site (prices, durations, samagri, languages, festivals).
 import hashlib,re as _re
-TARGET=900
+TARGET=780
 def _A():return globals().get('AREAS') or []
 def _h(s,n):return int(hashlib.md5(s.encode()).hexdigest(),16)%n
 def _wc(h):
@@ -10,7 +10,7 @@ def _wc(h):
     return len(_re.sub(r'<[^>]+>',' ',h).split())
 def _pick(key,*v):return v[_h(key,len(v))]
 def _pl(x):return ", ".join(f'<a href="{s[0]}.html">{s[1]}</a>' for s in x)
-SKIP=("privacy.html","terms.html","refund.html","404.html")
+SKIP=("404.html",)
 
 def V(k,i,*a):return a[_h(k+str(i),len(a))]
 def _order(k,items):
@@ -131,12 +131,28 @@ def _place(path):
     return None
 
 FC=("<ul class='fcards' role='list'>"+"".join(f"<li class='fcard'><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='{d}'/></svg><b>{t}</b><span>{x}</span></li>" for d,t,x in [("M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z M9 12l2 2 4-4","Verified pandits","We speak to every pandit before listing them."),("M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z M12 7v5l3 2","Muhurat confirmed","Timings checked for your own city and Panchang."),("M5 13l4 4L19 7","Pay after confirmation","Nothing is charged until the plan is confirmed."),("M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z M3 12h18 M12 3c3 3 3 15 0 18 M12 3c-3 3-3 15 0 18","Your language","Hindi, Bengali, Tamil, Telugu and more.")])+"</ul>")
+def _sections_legal(path):
+    p=path[:-5].split("/")[-1]
+    common=[
+    ("Who we are and what this page is for","<p>Online Pujari helps families across India and abroad find a verified pandit for pujas and sanskar, at home, in a society hall, at an office or shop, or online. This plain-language guide sits beside our formal policy to help you understand it quickly. It is an explanation, not a legal document: if any detail here ever differs from the policy text above, the policy text above applies.</p><p>We keep our language simple on purpose. Booking a puja is often an emotional and time-sensitive decision for a family, and you should never need a lawyer to understand what you are agreeing to.</p>"),
+    ("How a booking works","<p>You choose a puja, a city, a date range and the language you prefer, using the booking form or WhatsApp. We then match a pandit, check the muhurat for your city and send you the plan on WhatsApp. You pay only after the pandit and muhurat are confirmed. Prices shown on the website are starting prices, and the final amount can vary with the city, the samagri you choose and the number of pandits needed. We confirm the total before you pay.</p><p>The pandits who perform your puja are independent professionals whom we connect you with. We take care to speak to every pandit before listing them and to confirm the plan with you, but the ritual itself is carried out by the pandit according to your family’s tradition.</p>"),
+    ("The details we ask for, and why","<p>To arrange a puja we ask for your name, phone number, city, preferred date and puja type, plus your language and, if you wish, your gotra for the sankalp. We use these details only to arrange your booking and to contact you about it. We do not sell your data, and we do not ask for government ID numbers, bank passwords or card numbers through the website.</p><p>If you create an account, you sign in with Google. We store the name, email and phone number connected to your account so that you can see your bookings, and pandits can see the details of bookings assigned to them so they can reach you on time.</p>"),
+    ("Your choices and how to reach us","<p>You can ask us to correct or delete the details we hold about you by messaging us on WhatsApp or through the contact page. You can also stop using the service at any time. If something about a booking, a payment or a pandit does not feel right, tell us straight away; we would rather fix it early than have you wait.</p><p>The website remembers one small preference in your own browser, your light or dark mode choice. It stays on your device and is not sent to us.</p>"),
+    ("Respect for every tradition","<p>Hindu practice differs between regions, languages and family lineages. A Bengali Lakshmi puja, a Tamil Ganapathi homam and a Gujarati vastu pujan share a spirit but not a script. We do not push a single template. Please tell us your family’s sampradaya and customs when you book so that the pandit prepares the correct sankalp and sequence, and let us know if anything needs to be adapted for the space you have.</p>"),
+    ("Dates, muhurat and festivals","<p>The auspicious time for a puja is chosen from the tithi, nakshatra, weekday and the almanac your family follows. Because local sunrise changes from one city to another, we confirm the muhurat for your own city. During festival weeks and wedding season pandits book out quickly, so we suggest asking at least a week ahead, and earlier for Diwali, Ganesh Chaturthi and Navratri. Our festival calendar lists the main dates, which follow the New Delhi panchang.</p>"),
+    ("Common questions","<h3>Do I pay in advance?</h3><p>No. You pay after the pandit and muhurat are confirmed.</p><h3>Can I change the date?</h3><p>Yes. Please see the rescheduling terms in the policy above, and tell us as early as possible.</p><h3>What if a pandit is not available?</h3><p>If we cannot assign a pandit for your booking, you receive a full refund, as stated in the policy above.</p><h3>Is an online puja possible?</h3><p>Yes. A pandit can lead the puja by video and perform the sankalp in your name and gotra.</p><h3>Who do I contact with a problem?</h3><p>Message us on WhatsApp or use the contact page. We respond as quickly as we can.</p>"),
+    ("Where to find more","<p>You can read about our <a href=\"services.html\">pujas and prices</a>, find a pandit in <a href=\"locations.html\">your city</a>, check <a href=\"festival-calendar-2026.html\">festival dates</a>, read our <a href=\"blog.html\">puja guides</a> or learn the terms in our <a href=\"puja-glossary.html\">puja glossary</a>. If you are a pandit and would like to join us, see <a href=\"become-a-pandit.html\">Become a pandit</a>.</p>")]
+    spec={"privacy":[("What “privacy” means for a puja booking","<p>A puja booking involves personal details: where you live, your family’s names and sometimes your gotra and birth-related information. We treat these as private. We collect only what is needed to arrange your booking, we do not sell it, and we keep the process transparent. When a pandit is assigned to your booking, only the details needed for that puja are shared with that pandit, such as your name, phone, address and date.</p><p>If you sign in with Google, Google handles your password; we never see it. We rely on Google sign-in and a secure database to store your account details, and we limit who can read them.</p>"),("Security and children","<p>Access to our admin tools is limited to our team. Pandits see only the bookings assigned to them. Customers see only their own bookings. If you suspect misuse of your details, tell us immediately and we will look into it. Our service is meant for adults arranging pujas for their families; if a child’s details are needed, such as for a mundan or annaprasan, they should be given by a parent or guardian.</p>")],
+    "terms":[("What you agree to when you book","<p>By booking you confirm that the details you give are correct and that you are authorised to arrange the puja at the address you provide. A booking is confirmed once the pandit and muhurat are agreed. We connect you with independent pandits and are not responsible for the outcome of rituals, which depend on faith, tradition and many factors outside our control.</p><p>Please be present at the venue at the agreed time, provide access, parking details and any society permissions, and tell us in advance about any restrictions such as a ban on open flame, so that the pandit can adapt.</p>"),("Prices, samagri and dakshina","<p>Prices on the website are starting prices. The final amount can vary with the puja, the city, the samagri kit and the number of pandits. Dakshina for the pandit and food or hospitality for guests are separate and are entirely up to you. We confirm the total before you pay, so there should be no surprises on the day.</p>")],
+    "refund":[("Rescheduling and refunds in simple words","<p>If your plans change, tell us as early as you can. Rescheduling is free up to 48 hours before the puja. If we cannot assign a pandit for your booking, you receive a full refund. For anything else, such as cancellation close to the puja or a problem on the day, message us and we will discuss it with you fairly.</p><p>To help us resolve a request quickly, please share your name, phone number, the puja and date, and a short description of what happened.</p>"),("How to request a change or refund","<ol class=\"steps\"><li>Message us on WhatsApp or use the contact page.</li><li>Share your name, phone number, puja and date.</li><li>Tell us whether you want to reschedule or cancel.</li><li>We confirm the next step with you in writing.</li></ol>")]}
+    return spec.get(p,[])+common
+
 def seo_more(path,body):
     if path in SKIP or path.startswith("account"):return ""
-    have=_wc(body)
-    if have>=TARGET:return ""
+    have=0
     secs=None
-    if path.startswith("pandits-in-"):
+    if path in ("privacy.html","terms.html","refund.html"):secs=_sections_legal(path)
+    elif path.startswith("pandits-in-"):
         st=path[len("pandits-in-"):-5]
         if st in STATES:
             s=STATES[st];secs=_sections_state(path,dict(state=s[0],cs=[c for c in CITYDATA if c[2]==st],sup=s[2],fest=s[3],note=s[4],reg=s[1]))
@@ -152,6 +168,8 @@ def seo_more(path,body):
         for a in ARTS:
             if a[0]==sl:secs=_sections_blog(path,a)
         if secs is None:secs=_sections_generic(path,"")
+    if secs is not None and path not in ("privacy.html","terms.html","refund.html"):
+        seen={h for h,_ in secs};secs=list(secs)+[x for x in _sections_generic(path,"") if x[0] not in seen and x[0]!="Frequently asked questions"]
     out=[];n=have
     for h,b in secs:
         out.append(f"<h2>{h}</h2>{b}");n+=_wc(f"<h2>{h}</h2>{b}")

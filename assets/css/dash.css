@@ -1,6 +1,6 @@
 /* Dashboard design system. Light + dark tokens, 44px targets, visible focus, reduced-motion safe. */
 :root{--bg:#f5f1f9;--card:#fff;--ink:#21162b;--mut:#6a5a7a;--line:#e5dcef;--pri:#c2410c;--pri-h:#9a3412;--on-pri:#fff;--acc:#ffb703;--side:#2b1638;--on-side:#eadff4;--ok:#15803d;--warn:#a16207;--bad:#b91c1c;--info:#1d4ed8;--soft:#faf6fd;--ring:#7c3aed;--sh:0 1px 2px #2b163814,0 8px 24px #2b16380d}
-@media(prefers-color-scheme:dark){:root{--bg:#120b19;--card:#1c1226;--ink:#f4edf9;--mut:#b9a9c8;--line:#34263f;--pri:#ff8a4c;--pri-h:#ffa270;--on-pri:#1b0f08;--side:#0d0713;--on-side:#d9cce6;--ok:#4ade80;--warn:#fbbf24;--bad:#f87171;--info:#93c5fd;--soft:#241830;--ring:#c4b5fd;--sh:0 1px 2px #0006,0 8px 24px #0004}}
+:root[data-theme="dark"]{--bg:#120b19;--card:#1c1226;--ink:#f4edf9;--mut:#b9a9c8;--line:#34263f;--pri:#ff8a4c;--pri-h:#ffa270;--on-pri:#1b0f08;--side:#0d0713;--on-side:#d9cce6;--ok:#4ade80;--warn:#fbbf24;--bad:#f87171;--info:#93c5fd;--soft:#241830;--ring:#c4b5fd;--sh:0 1px 2px #0006,0 8px 24px #0004}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 Mukta,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 h1,h2,h3{font-family:Eczar,Georgia,serif;line-height:1.2;margin:0}
@@ -146,3 +146,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--ring);outline:3px sol
  #toasts{bottom:76px}.steps li{font-size:.7rem}
 }
 .col,.main{min-width:0}.shell>*{min-width:0}.tblwrap{max-width:100%;-webkit-overflow-scrolling:touch}.bk,.card{min-width:0;overflow-wrap:anywhere}
+.tt{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.tt svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tt .i-moon{display:none}[data-theme=dark] .tt .i-sun{display:none}[data-theme=dark] .tt .i-moon{display:block}
+.tt-float{position:fixed;right:16px;top:12px;z-index:60;box-shadow:var(--sh)}
+@media(max-width:860px){.tt-float{right:66px;top:10px;width:40px;height:40px}}
