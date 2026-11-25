@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><defs><radialGradient id="g" cx="50%" cy="45%" r="55%"><stop offset="0" stop-color="#ffd166" stop-opacity=".9"/><stop offset=".5" stop-color="#ff8a4c" stop-opacity=".25"/><stop offset="1" stop-color="#ff8a4c" stop-opacity="0"/></radialGradient><linearGradient id="k" x1="0" x2="1"><stop offset="0" stop-color="#b8620a"/><stop offset=".5" stop-color="#ffcf5a"/><stop offset="1" stop-color="#b8620a"/></linearGradient><linearGradient id="f" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ff6b1a"/><stop offset="1" stop-color="#ffe27a"/></linearGradient></defs>
-<circle cx="200" cy="190" r="190" fill="url(#g)"/><g fill="none" stroke="#ffd166" stroke-opacity=".5"><circle cx="200" cy="190" r="150"/><circle cx="200" cy="190" r="120" stroke-dasharray="3 7"/></g>
-<path d="M155 150q-5 90 20 120h50q25-30 20-120z" fill="url(#k)"/><path d="M165 150h70" stroke="#7a3f00" stroke-width="5"/><ellipse cx="200" cy="148" rx="42" ry="9" fill="#ffe08a"/>
-<g fill="#2f9e5e"><path d="M200 140c-40-10-60-40-55-70 30 5 55 35 55 70zM200 140c40-10 60-40 55-70-30 5-55 35-55 70zM200 140c-12-30-8-60 0-80 8 20 12 50 0 80z"/></g>
-<ellipse cx="200" cy="95" rx="26" ry="32" fill="#c0662b"/><path d="M200 63c-6 6-8 12 0 18 8-6 6-12 0-18z" fill="#ffd166"/>
-<g fill="#ff9ec4"><circle cx="150" cy="215" r="7"/><circle cx="250" cy="215" r="7"/><circle cx="200" cy="235" r="7"/></g>
-<path d="M120 290q80 30 160 0l-20 34h-120z" fill="url(#k)"/><path d="M200 262c-9 14-11 22 0 28 11-6 9-14 0-28z" fill="url(#f)"/>
-<g fill="#ffd166"><path d="M60 80l4 10 10 4-10 4-4 10-4-10-10-4 10-4zM340 120l3 8 8 3-8 3-3 8-3-8-8-3 8-3zM330 290l3 8 8 3-8 3-3 8-3-8-8-3 8-3zM70 260l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/></g></svg>
