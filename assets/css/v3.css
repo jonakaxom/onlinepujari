@@ -1,0 +1,74 @@
+/* v3: layout fixes loaded after every other stylesheet.
+   - no horizontal sliders on the home page (festivals, pujas, guides are plain grids)
+   - category cards: readable pills (they were white text on a white card)
+   - language cards: long scripts wrap instead of overlapping the next card
+   - footer: one compact grid, no empty gaps */
+
+/* hero booking form: every puja visible, no inner scroll box */
+.tiles{max-height:none;overflow:visible}
+
+/* ---------- grids that replace the old sliders ---------- */
+.pg4{grid-template-columns:repeat(4,1fr)}
+.agrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.fchips{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;overflow:visible;scroll-snap-type:none;padding:0}
+.fchips li{flex:none;min-width:0}
+.fchips li.more{display:none}
+.fchips time{width:88px}
+@media(max-width:1020px){.pg4,.agrid{grid-template-columns:repeat(2,1fr)}.fchips{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.pg4,.agrid,.fchips{grid-template-columns:1fr}}
+
+/* ---------- puja categories ---------- */
+.cats{grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:980px){.cats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.cats{grid-template-columns:1fr}}
+.cat{--a:#c2410c;min-height:0;display:flex;flex-direction:column;gap:12px;padding:22px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-top:4px solid var(--a);border-radius:16px;box-shadow:var(--shadow)}
+.cat.c1{--a:#7c3aed}.cat.c2{--a:#0f8a5f}.cat.c3{--a:#be123c}.cat.c4{--a:#b7791f}.cat.c5{--a:#2563eb}
+.cat .g{right:16px;top:8px;font-size:4rem;color:var(--a);opacity:.11}
+.cat .ci{width:44px;height:44px;margin:0;background:#00000010;background:color-mix(in srgb,var(--a) 14%,transparent);color:var(--a)}
+.cat h3{margin:0;font-size:1.3rem;color:var(--ink)}
+.cat h3:after{content:none}
+.cat ul{gap:8px}
+.cat li a{background:var(--soft);color:var(--ink);border:1px solid var(--line);padding:6px 14px;min-height:36px;display:inline-flex;align-items:center}
+.cat li a:hover{background:var(--a);border-color:var(--a);color:#fff}
+
+/* ---------- "in your language" cards ---------- */
+.band .lg{grid-template-columns:repeat(4,1fr);gap:14px}
+.lg a{min-width:0;overflow:hidden;padding:18px}
+.lg .nat{font-size:clamp(1.2rem,1.6vw,1.55rem);line-height:1.4;overflow-wrap:anywhere;margin-bottom:6px}
+@media(max-width:980px){.band .lg{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.band .lg{grid-template-columns:1fr}}
+
+/* ---------- temple-dome divider above the footer ---------- */
+.skyline{height:30px;margin-top:64px;background:url(../img/domes.svg) center bottom/36px 30px repeat-x}
+
+/* ---------- footer ---------- */
+footer.ft{padding:44px 0 24px}
+footer.ft h3{font:700 1rem Eczar,serif;color:var(--gold);margin:0 0 8px}
+footer.ft h3:before{content:none}
+footer.ft .ftn h3:not(:first-child){margin-top:24px}
+footer.ft a{color:#e9ddf3;text-decoration:none}
+footer.ft a:hover{color:var(--gold);text-decoration:underline}
+.ft-grid{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:36px;padding-bottom:34px}
+.ftn a{display:block;padding:4px 0;line-height:1.4}
+footer.ft .flogo{display:inline-flex;align-items:center;gap:8px;font:700 1.5rem Eczar,serif;color:#fff}
+.flogo span span{color:var(--gold)}
+.ft-brand p{color:#cdbbe0;max-width:30ch;margin:12px 0 16px}
+.ft-contact{list-style:none;margin:0 0 18px;padding:0;display:grid;gap:10px}
+.ft-contact li{display:flex;gap:10px;align-items:flex-start}.ft-contact svg{flex:none;color:var(--gold);margin-top:3px}
+.ft-contact a{word-break:break-word}
+.ft-sec{border-top:1px solid #ffffff22;padding:26px 0 6px}
+.ft-cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px 32px}
+.ftc{margin:0 0 20px;min-width:0}
+.ftc h4{margin:0 0 6px;font-size:1rem}.ftc h4 a{color:#fff}
+.ftc a{display:block;color:#cdbbe0;font-size:.92rem;padding:2px 0}
+.ftl{columns:var(--k,1) 150px;column-gap:32px}.ftl a{break-inside:avoid}
+.ft .stl{display:flex;flex-wrap:wrap;gap:8px}
+.ft .stl a{padding:4px 13px;border:1px solid #ffffff30;border-radius:999px;font-size:.88rem;min-height:0}
+.ft .stl a:hover{border-color:var(--gold);text-decoration:none}
+.ft-seo{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:22px;padding-top:22px;border-top:1px solid #ffffff22;color:#bba6d0;font-size:.9rem}
+.ft-seo p{margin:0}.ft-seo b{color:#e9ddf3}.ft-seo a{color:#ffd777;text-decoration:underline}
+.ft-trust{list-style:none;display:flex;flex-wrap:wrap;gap:12px 28px;margin:22px 0 0;padding:20px 0;border-top:1px solid #ffffff22;border-bottom:1px solid #ffffff22;font-weight:600}
+.ft-trust li{display:flex;gap:10px;align-items:center}.ft-trust svg{color:var(--gold);flex:none}
+footer.ft .base{padding-top:18px}
+@media(max-width:980px){.ft-grid{grid-template-columns:1fr 1fr}.ft-brand{grid-column:1/-1}.ft-cgrid{grid-template-columns:repeat(2,1fr)}.ftc.wide{grid-column:1/-1!important}}
+@media(max-width:560px){.ft-grid{gap:26px 18px}.ft-cgrid{grid-template-columns:1fr}.ft-seo{grid-template-columns:1fr}.ft-trust{display:grid}}
