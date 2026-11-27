@@ -1,7 +1,7 @@
 # Firebase setup (free Spark plan)
 
 1. **Create project** at console.firebase.google.com (no billing needed).
-2. **Authentication → Sign-in method → Google → Enable.**
+2. **Authentication → Sign-in method → enable BOTH "Google" and "Email/Password".** (Email/Password powers the new Sign in / Create account tabs, password reset and email verification. Leave "Email link" off.)
 3. **Authentication → Settings → Authorized domains → Add** `onlinepujari.vercel.app` (and your own domain later, plus `localhost` if testing).
 4. **Firestore Database → Create** (production mode, region `asia-south1`).
 5. **Firestore → Rules:** paste the whole of `firebase/firestore.rules` and **Publish**. Republish every time this file changes.
@@ -11,7 +11,7 @@
 
 ## Who approves pandits?  You (the admin)
 
-1. Open `account/login.html` and sign in with your Google account once (choose "Customer"). This creates your user record.
+1. Open `account/login.html` and sign in once (Google, or create an account with email and password) (choose "Customer"). This creates your user record.
 2. Firebase console → Authentication → Users → copy your **User UID**.
 3. Firestore → **Start collection** `admins` → Document ID = your UID → add one field, e.g. `active` (boolean) = true. Save.
 4. Sign in again. You are sent to `account/admin.html`.
@@ -23,9 +23,9 @@ Admin rights can only be given by creating the `admins/<uid>` document in the co
 ## Pages
 `account/login.html` · `account/dashboard.html` (customer) · `account/pandit.html` · `account/admin.html`
 
-
-## Email + password sign-in (new)
-1. Firebase console > Authentication > Sign-in method > **Email/Password** > Enable > Save (free).
-2. Authentication > Templates: customise the verification and password-reset emails (optional).
-3. Authentication > Settings > Authorized domains: keep your Vercel / GitHub Pages domains listed.
-Password reset and verification emails are sent by Firebase for free. Firestore rules did not change in this version.
+## Sign-in, sign-up and support details (v14)
+- The login page has **Sign in** and **Create account** tabs (email + password or Google), a role choice (customer or pandit), password reset ("Forgot password?") and a verification email sent after sign-up.
+- Deep links: `account/login.html?mode=signup&role=pandit` opens sign-up with "pandit" preselected (the Become a pandit page uses it).
+- Password reset and verification emails are sent by Firebase. To brand them: Authentication → Templates.
+- No Firestore rule changes were needed for v14. Existing users keep working.
+- **Replace the placeholder support contacts** in `assets/js/ui.js` (the `SUPPORT` constant at the bottom): WhatsApp number (country code, digits only), phone and email. They power the "Talk to us" button and the Help page in the customer dashboard. The website footer values come from `tools/build.py` (`PHONE`, `EMAIL`).
