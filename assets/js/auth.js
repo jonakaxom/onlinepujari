@@ -1,6 +1,7 @@
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail,sendEmailVerification,updateProfile,updatePassword,reauthenticateWithCredential,EmailAuthProvider,setPersistence,browserLocalPersistence,browserSessionPersistence} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import * as fs from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import {initializeAppCheck,ReCaptchaV3Provider} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js";
 import {firebaseConfig,APP_CHECK_SITE_KEY} from "./firebase-config.js";
 
 export const configured=!firebaseConfig.apiKey.startsWith("PASTE");
@@ -9,8 +10,8 @@ let app,auth,db;
 if(configured){
   app=initializeApp(firebaseConfig);
   if(APP_CHECK_SITE_KEY){
-    const m=await import("https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js");
-    m.initializeAppCheck(app,{provider:new m.ReCaptchaV3Provider(APP_CHECK_SITE_KEY),isTokenAutoRefreshEnabled:true});
+    // Static import (downloads in parallel, no top-level await). A failure here must never block sign-in.
+    try{initializeAppCheck(app,{provider:new ReCaptchaV3Provider(APP_CHECK_SITE_KEY),isTokenAutoRefreshEnabled:true})}catch(e){console.warn("App Check not started",e)}
   }
   auth=getAuth(app);db=fs.getFirestore(app);
 }
