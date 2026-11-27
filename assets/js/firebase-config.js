@@ -9,4 +9,4 @@ export const firebaseConfig = {
   appId: "1:715390330892:web:bda2074ab6942f95696629"
 };
 // Optional but recommended (free): reCAPTCHA v3 site key for Firebase App Check. Leave "" to skip.
-export const APP_CHECK_SITE_KEY = "";
+export const APP_CHECK_SITE_KEY = "6LdnDzUuAAAAAOGvlLHUKJjvMwiB-JpnIi-I0qOv";
