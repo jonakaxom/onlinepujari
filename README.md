@@ -47,3 +47,10 @@ The supplied brand kit is kept next to the site folder (`brand-assets/`, not dep
 - `assets/img/og-image.png`: rebuilt from the brand temple artwork with clean text (the supplied social cover has its text clipped at the left edge).
 - Not used on purpose: `website-hero-banner`, `about-section` and `puja-promo` (text is baked into the pictures, so it cannot be translated, resized or read by screen readers; the home About section is live text instead), the PNG/SVG logos (their text falls back to Georgia and the two words touch; the site header already renders the same wordmark with the real Eczar font), and the favicons/icons (identical to the ones already in the site).
 - Home page on phones now shows 4 pujas, 3 festivals and 14 cities, each with a "see all" button.
+
+## v14.2: colour and graphics pass
+- All new rules are at the bottom of `assets/css/v3.css` ("COLOUR AND GRAPHICS PASS"). Accent colours are the `--a1..--a6` variables at the top of that block.
+- Hero: layered gradient, brand diya-mandala artwork, wave edge, colour-coded puja tiles (first 8 shown, "Show all pujas" reveals the rest, script in `assets/js/enhance.js`).
+- Sections (festivals, promise, categories, steps, About, guides, cities, enquiry) have their own gradients and accent colours, in light and dark mode.
+- Mega menu: coloured category cards plus a "Not sure which puja?" panel (markup: `nav` in `tools/build.py`).
+- Photos used on cards and page headers are transparent cut-outs (`assets/img/brand/*-cut.webp`) so they float on the card colour. The About section uses the uncut family photo (the large supplied version was clipped at the top, so the clean one is upscaled).

@@ -15,3 +15,5 @@ document.querySelectorAll('[data-tabs]').forEach(w=>{const bs=[...w.querySelecto
 document.querySelectorAll('[data-open-form]').forEach(a=>a.addEventListener('click',e=>{const f=document.querySelector('aside form.book,form.book');if(f){e.preventDefault();f.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});const i=f.querySelector('input,select');i&&i.focus({preventScroll:true})}}));
 // hero search -> services page prefill
 (()=>{const q=new URLSearchParams(location.search).get('q'),i=document.querySelector('[data-search]');if(q&&i){i.value=q;i.dispatchEvent(new Event('input'))}})();
+/* hero booking form: show the popular pujas first, "Show all" reveals the rest */
+document.querySelectorAll('.hero .tiles-more').forEach(b=>{const t=b.previousElementSibling;if(!t)return;b.addEventListener('click',()=>{const o=t.classList.toggle('all');b.setAttribute('aria-expanded',o);b.textContent=o?'Show fewer pujas':'Show all pujas'})});

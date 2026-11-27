@@ -123,3 +123,168 @@ footer.ft{background-image:url(../img/brand/plum-mandala.webp);background-repeat
 /* booking form tiles: equal height */
 .tiles{grid-auto-rows:1fr}
 .tiles label{display:flex}.tiles span{flex:1;display:flex;align-items:center}
+
+/* =====================================================================
+   COLOUR AND GRAPHICS PASS
+   Warm gradients, brand artwork and per-section accent colours so the
+   page no longer reads as flat white / cream.
+   ===================================================================== */
+:root{--a1:#e8590c;--a2:#d6336c;--a3:#7048e8;--a4:#12805c;--a5:#f59f00;--a6:#1c7ed6;
+  --wave:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60' preserveAspectRatio='none'%3E%3Cpath d='M0 30c180 40 360 40 540 18s360-48 540-30 270 22 360 12v30H0z'/%3E%3C/svg%3E")}
+
+/* ---- hero: layered colour + artwork ---- */
+.hero.v2{position:relative;isolation:isolate;padding-bottom:84px;
+  background:
+   radial-gradient(560px 380px at 6% 96%,#ff5c9a40,transparent 64%),
+   radial-gradient(700px 440px at 98% 4%,#ffb70070,transparent 62%),
+   radial-gradient(520px 360px at 52% 48%,#8c6bf433,transparent 66%),
+   linear-gradient(118deg,#fff2df 0%,#ffdcbc 42%,#fbcfe5 100%)}
+.hero.v2:before{display:block;content:"";position:absolute;z-index:-1;left:-190px;bottom:-250px;width:440px;height:440px;background:url(../img/brand/diya-mandala-cut.webp) center/contain no-repeat;opacity:.55;transform:rotate(-14deg);pointer-events:none}
+.hero.v2 .mandala{z-index:-1;right:-90px;top:6px;margin-top:0!important;width:520px;height:520px;background:url(../img/brand/diya-mandala-cut.webp) center/contain no-repeat;opacity:.85;animation:slowspin 120s linear infinite}
+@keyframes slowspin{to{transform:rotate(360deg)}}
+.hero.v2:after{display:block;content:"";position:absolute;z-index:1;left:0;right:0;bottom:-1px;height:46px;background:var(--bg);-webkit-mask:var(--wave) bottom/100% 100% no-repeat;mask:var(--wave) bottom/100% 100% no-repeat;pointer-events:none}
+.hero.v2 .book.card{position:relative;z-index:2;border:1px solid #fff;box-shadow:0 30px 60px #7a2a4a2e,0 4px 0 #ffb703 inset}
+.hero.v2 .book.card h3{background:linear-gradient(90deg,var(--a1),var(--a2));-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}
+.hero.v2 h1 em,.hero.v2 h1 .grad{background:linear-gradient(90deg,var(--a1),var(--a2) 55%,var(--a3));-webkit-background-clip:text;background-clip:text;color:transparent}
+[data-theme=dark] .hero.v2{background:radial-gradient(560px 380px at 6% 96%,#d6336c44,transparent 64%),radial-gradient(700px 440px at 98% 4%,#e8590c44,transparent 62%),radial-gradient(520px 360px at 52% 48%,#7048e833,transparent 66%),linear-gradient(118deg,#1b1026,#2b1638 50%,#431a35)}
+[data-theme=dark] .hero.v2:before{opacity:.35}
+[data-theme=dark] .hero.v2 .mandala{opacity:.45}
+
+/* hero booking card: compact list with colour-coded tiles */
+.hero .tiles:not(.all) label:nth-child(n+9){display:none}
+.tiles-more{display:none}
+.hero .tiles-more{display:block;width:100%;margin:10px 0 0;min-height:42px;border:1.5px dashed var(--line);border-radius:10px;background:transparent;color:var(--saf);font:700 .92rem Mukta,sans-serif;cursor:pointer}
+.hero .tiles-more:hover{background:var(--soft)}
+.tiles span{border-left-width:4px;border-left-color:var(--t,var(--line));transition:background .15s,transform .15s}
+.tiles label:nth-child(6n+1){--t:var(--a1)}.tiles label:nth-child(6n+2){--t:var(--a3)}.tiles label:nth-child(6n+3){--t:var(--a4)}
+.tiles label:nth-child(6n+4){--t:var(--a2)}.tiles label:nth-child(6n+5){--t:var(--a5)}.tiles label:nth-child(6n){--t:var(--a6)}
+.tiles label:hover span{background:var(--soft);transform:translateY(-1px)}
+
+/* ---- trust strip ---- */
+.strip{background:linear-gradient(90deg,#fff6e6,#fdeefa 55%,#eef0ff);border-bottom:1px solid #f1dfee}
+[data-theme=dark] .strip{background:linear-gradient(90deg,#1f1229,#27142f)}
+.strip svg{background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;box-shadow:0 6px 14px #d6336c33}
+.strip li:nth-child(2) svg{background:linear-gradient(135deg,var(--a3),var(--a6))}
+.strip li:nth-child(3) svg{background:linear-gradient(135deg,var(--a5),var(--a1))}
+.strip li:nth-child(4) svg{background:linear-gradient(135deg,var(--a4),var(--a6))}
+
+/* ---- festivals ---- */
+section:has(.fchips){background:linear-gradient(180deg,#fff7ea,#ffeadf 70%,#fff3ea);position:relative}
+[data-theme=dark] section:has(.fchips){background:linear-gradient(180deg,#1b1026,#27142f)}
+.fchips li{border:1px solid #f6d9c2;box-shadow:0 6px 16px #b8400a14}
+.fchips li:hover{transform:translateY(-3px);box-shadow:0 12px 24px #b8400a26}
+.fchips time{background:linear-gradient(160deg,#f08a3c,#c2410c 70%,#a12d0b)}
+.fchips li:nth-child(3n+2) time{background:linear-gradient(160deg,#b36bf5,#7048e8 70%,#4b2fb3)}
+.fchips li:nth-child(3n) time{background:linear-gradient(160deg,#27b384,#12805c 70%,#0b5a40)}
+
+/* ---- our promise: coloured icon badges on cards ---- */
+section:has(.promise){background:linear-gradient(180deg,var(--bg),#f4ecff 50%,var(--bg))}
+[data-theme=dark] section:has(.promise){background:linear-gradient(180deg,var(--bg),#241433 50%,var(--bg))}
+.promise{gap:18px;grid-template-columns:repeat(6,1fr)}
+.promise li{--a:var(--a1);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px 10px 20px;box-shadow:0 10px 24px #5a2d0a12;position:relative;overflow:hidden}
+.promise li:before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,var(--a),color-mix(in srgb,var(--a),#fff 45%))}
+.promise li.pr1{--a:var(--a3)}.promise li.pr2{--a:var(--a2)}.promise li.pr3{--a:var(--a6)}.promise li.pr4{--a:var(--a5)}.promise li.pr5{--a:var(--a4)}
+.promise svg{width:60px;height:60px;padding:15px;background:linear-gradient(135deg,var(--a),color-mix(in srgb,var(--a),#000 18%));color:#fff;box-shadow:0 10px 20px color-mix(in srgb,var(--a),transparent 62%)}
+.promise li:hover{transform:translateY(-5px);box-shadow:0 18px 34px #5a2d0a22}
+.promise li:hover svg{background:linear-gradient(135deg,var(--a),color-mix(in srgb,var(--a),#000 18%));color:#fff;transform:scale(1.08) rotate(-4deg)}
+.promise svg{transition:transform .2s}
+@media(max-width:980px){.promise{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.promise{grid-template-columns:repeat(2,1fr);gap:12px}}
+
+/* ---- puja categories ---- */
+#categories{background:linear-gradient(160deg,#f1e9ff 0%,#fff0e6 55%,#ffe6f0 100%);position:relative}
+[data-theme=dark] #categories{background:linear-gradient(160deg,#1f1229,#2b1638 60%,#341a33)}
+.cat{border-top-width:5px}
+
+/* ---- all pujas ---- */
+section:has(>.w>.pgrid){background:linear-gradient(180deg,var(--bg),#fff6ec)}
+.pcard.has-img .pt{background:linear-gradient(160deg,#fff4e0,#ffe3cf 60%,#fbd9ea)!important}
+.pcard.has-img.cg1 .pt{background:linear-gradient(160deg,#f4ecff,#e6dbff 60%,#ffe3f0)!important}
+.pcard.has-img.cg2 .pt{background:linear-gradient(160deg,#e6fbf1,#cdf3e2 60%,#fff3d6)!important}
+.pcard.has-img.cg3 .pt{background:linear-gradient(160deg,#ffe9ef,#ffd3df 60%,#fff0d9)!important}
+.pcard.has-img.cg4 .pt{background:linear-gradient(160deg,#fff6d6,#ffe9a8 60%,#ffe1cf)!important}
+.pcard.has-img.cg5 .pt{background:linear-gradient(160deg,#e5f2ff,#cfe5fb 60%,#f3e8ff)!important}
+.pcard.has-img .pt i{background:#fffffff0}
+
+/* ---- how it works: numbered gradient badges ---- */
+section:has(.steps){background:linear-gradient(135deg,#fff1e3,#ffe7f1 60%,#efe9ff)}
+[data-theme=dark] section:has(.steps){background:linear-gradient(135deg,#1f1229,#2b1638)}
+.steps li{border:1px solid #f2d9d0;box-shadow:0 10px 24px #5a2d0a14;overflow:hidden;--a:var(--a1)}
+.steps li:nth-child(2){--a:var(--a3)}.steps li:nth-child(3){--a:var(--a4)}.steps li:nth-child(4){--a:var(--a2)}
+.steps li:before{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;font:700 1.7rem/1 Eczar,serif;color:#fff;-webkit-text-stroke:0;background:linear-gradient(135deg,var(--a),color-mix(in srgb,var(--a),#000 20%));box-shadow:0 10px 20px color-mix(in srgb,var(--a),transparent 60%);margin-bottom:12px}
+.steps li:after{content:"";position:absolute;right:-30px;bottom:-30px;width:110px;height:110px;border-radius:50%;background:color-mix(in srgb,var(--a),transparent 90%)}
+
+/* ---- about / story: framed photo on a colour shape ---- */
+.story{background:linear-gradient(120deg,#fff4e2 0%,#ffe8d2 45%,#fbd9ea 100%)}
+[data-theme=dark] .story{background:linear-gradient(120deg,#1f1229,#2b1638 60%,#3a1a33)}
+.story-i{position:relative;overflow:visible;border:0;background:none;box-shadow:none;margin:14px}
+.story-art{position:absolute;inset:-16px -16px 16px 16px;border-radius:34px;background:linear-gradient(135deg,var(--a1),var(--a2) 60%,var(--a3));transform:rotate(-3deg);opacity:.9;z-index:0}
+.story-i img{position:relative;z-index:1;border-radius:26px;border:6px solid #fffaf0;background:#fdf5e6;box-shadow:0 26px 50px #5a1f3a40;aspect-ratio:844/790;object-fit:cover}
+
+/* ---- language band: richer gradient ---- */
+.band{background-color:#4a0f1c;background-image:url(../img/brand/plum-mandala.webp),radial-gradient(600px 300px at 0 0,#a3194a66,transparent 70%),linear-gradient(120deg,#4a0f1c,#3a1040 60%,#2b1638);background-repeat:no-repeat;background-position:right -160px center,0 0,0 0;background-size:520px,auto,auto}
+.lg a{background:linear-gradient(160deg,#ffffff14,#ffffff06)}
+
+/* ---- footer + CTA accents ---- */
+footer.ft{background-color:#2b1638;background-image:url(../img/brand/plum-mandala.webp),radial-gradient(700px 320px at 0 100%,#d6336c26,transparent 70%),linear-gradient(180deg,#2b1638,#220f2d);background-repeat:no-repeat;background-position:right -140px top -120px,0 0,0 0;background-size:560px,auto,auto}
+
+/* ---- section headings: gradient underline accent ---- */
+section h2.c:after{content:"";display:block;width:64px;height:4px;border-radius:4px;margin:12px auto 0;background:linear-gradient(90deg,var(--a1),var(--a2),var(--a3))}
+
+/* ---- header: thin colour line ---- */
+header.top:before,header:first-of-type:before{content:"";display:block;height:3px;background:linear-gradient(90deg,var(--a1),var(--a5),var(--a2),var(--a3))}
+
+/* ---- mega menu: coloured category cards + promo panel ---- */
+.mm{padding:20px;border:0;box-shadow:0 30px 70px #2b163838,0 0 0 1px #eadfce;overflow:hidden}
+.mm:before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--a1),var(--a5),var(--a2),var(--a3))}
+.mm:not(.mm-s){background:linear-gradient(180deg,#fff,#fff8f0)}
+[data-theme=dark] .mm:not(.mm-s){background:linear-gradient(180deg,#241633,#1f1229)}
+.mmw{display:grid;grid-template-columns:1fr 250px;gap:18px;align-items:stretch}
+.mmg{grid-template-columns:repeat(3,1fr);gap:12px}
+.mmc{--a:var(--a1);background:color-mix(in srgb,var(--a),#fff 90%);border:1px solid color-mix(in srgb,var(--a),#fff 78%);border-radius:14px;padding:12px 14px 8px}
+[data-theme=dark] .mmc{background:color-mix(in srgb,var(--a),#1f1229 88%);border-color:color-mix(in srgb,var(--a),#1f1229 70%)}
+.mmc.c1{--a:var(--a3)}.mmc.c2{--a:var(--a4)}.mmc.c3{--a:var(--a2)}.mmc.c4{--a:var(--a5)}.mmc.c5{--a:var(--a6)}
+.mmc h4{display:flex;align-items:center;gap:8px;color:color-mix(in srgb,var(--a),#000 18%);margin:0 0 6px}
+[data-theme=dark] .mmc h4{color:color-mix(in srgb,var(--a),#fff 35%)}
+.mmc .ci{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--a);color:#fff;flex:none}
+.mmc .ci svg{width:15px;height:15px}
+.mm .mmc a{padding:4px 2px;min-height:28px;font-size:.95rem}
+.mm .mmc a:hover{color:color-mix(in srgb,var(--a),#000 25%)}
+.mm .mmp{display:flex;flex-direction:column;justify-content:flex-end;gap:6px;position:relative;overflow:hidden;border-radius:16px;padding:18px;color:#fff;text-decoration:none;background:linear-gradient(160deg,#7048e8,#d6336c 60%,#e8590c);min-height:100%}
+.mm .mmp:hover{text-decoration:none;color:#fff}
+.mm .mmp img{position:absolute;right:-18px;top:-8px;width:170px;height:auto;filter:drop-shadow(0 10px 14px #0003);transform:rotate(8deg)}
+.mm .mmp b{font:700 1.25rem/1.15 Eczar,serif;position:relative;max-width:12ch;margin-top:120px}
+.mm .mmp span{font-weight:400;font-size:.9rem;opacity:.95;position:relative;line-height:1.4}
+.mm .mmp em{font-style:normal;font-weight:700;background:#fff;color:#a12d0b;border-radius:99px;padding:8px 14px;align-self:flex-start;margin-top:6px;position:relative}
+.mm .mmall{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-weight:700;color:var(--a1)}
+.mm-s{border-radius:18px}
+@media(max-width:1180px){.mmw{grid-template-columns:1fr}.mm .mmp{display:none}}
+@media(prefers-reduced-motion:reduce){.hero.v2 .mandala{animation:none}}
+.mm .mmp{white-space:normal;text-align:left;align-items:flex-start}.mm .mmp b,.mm .mmp span{display:block;max-width:none}.mm .mmp b{margin-top:128px}
+
+/* cut-out artwork floats on the card colour */
+.pcard.has-img .pt img{object-fit:contain;object-position:center bottom;padding:12px 18px 14px;filter:drop-shadow(0 10px 10px #5a1f3a38)}
+.pcard.has-img:hover .pt img{transform:scale(1.06) translateY(-2px)}
+.page-h .ph-img{width:min(330px,32vw);aspect-ratio:auto;object-fit:contain;border:0;border-radius:0;background:none;box-shadow:none;filter:drop-shadow(0 22px 22px #5a1f3a40)}
+
+/* ---- guides, cities, enquiry: same colour language ---- */
+section:has(.agrid){background:linear-gradient(180deg,#fff,#f6efff 60%,#fff4ec)}
+[data-theme=dark] section:has(.agrid){background:linear-gradient(180deg,var(--bg),#241433)}
+.agrid .acard{border-top:4px solid var(--a1);box-shadow:0 10px 24px #5a2d0a14}
+.agrid .acard:nth-child(4n+2){border-top-color:var(--a3)}.agrid .acard:nth-child(4n+3){border-top-color:var(--a4)}.agrid .acard:nth-child(4n){border-top-color:var(--a2)}
+section:has(.cityc){background:linear-gradient(160deg,#fff4ea 0%,#fde8f2 55%,#efe9ff 100%)}
+[data-theme=dark] section:has(.cityc){background:linear-gradient(160deg,#1f1229,#2b1638)}
+.cityc a{background:#fff;border:1px solid #f0d9e6;box-shadow:0 4px 10px #7a2a4a14;transition:transform .15s,background .15s,color .15s}
+[data-theme=dark] .cityc a{background:#2a1a3a;border-color:#4a3560}
+.cityc a:hover{background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;border-color:transparent;transform:translateY(-2px)}
+section:has(form.full){background:linear-gradient(135deg,#fff1e3,#fde6f0 55%,#ece6ff)}
+[data-theme=dark] section:has(form.full){background:linear-gradient(135deg,#1f1229,#2b1638)}
+.pcard.has-img .pt{height:190px!important}
+.page-h .ph-txt h1{max-width:none;font-size:clamp(2rem,3.6vw,3rem)}
+.page-h .ph-img{width:min(300px,28vw)}
+
+/* phones/tablets: keep hero artwork in the corners, away from the text */
+@media(max-width:900px){
+  .hero.v2 .mandala{width:260px;height:260px;right:-110px;top:-40px;opacity:.5}
+  .hero.v2:before{width:280px;height:280px;left:-150px;bottom:-170px;opacity:.4}
+}
