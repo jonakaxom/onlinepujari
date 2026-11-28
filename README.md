@@ -54,3 +54,9 @@ The supplied brand kit is kept next to the site folder (`brand-assets/`, not dep
 - Sections (festivals, promise, categories, steps, About, guides, cities, enquiry) have their own gradients and accent colours, in light and dark mode.
 - Mega menu: coloured category cards plus a "Not sure which puja?" panel (markup: `nav` in `tools/build.py`).
 - Photos used on cards and page headers are transparent cut-outs (`assets/img/brand/*-cut.webp`) so they float on the card colour. The About section uses the uncut family photo (the large supplied version was clipped at the top, so the clean one is upscaled).
+
+## v14.3: pandit directory
+- `assets/js/pandits.js`: loads approved pandits (Firestore REST) and renders cards. Home preview = `#pandits` section after About; full page = `pandits.html` with Filter (city, language, puja, experience, rating, available today), Sort, name/city/puja search, load more, shareable URLs. CSS: "PANDIT DIRECTORY" block in `assets/css/v3.css`.
+- Booking from a card: signed-in customers land in the booking wizard with that pandit preselected; others sign in first and continue there.
+- Pandit profile: optional photo link; Admin: "Sync ratings to public cards". Rules changed: see docs/FIREBASE-SETUP.md.
+- Only the public pages that show the directory allow `https://firestore.googleapis.com` in their Content-Security-Policy.

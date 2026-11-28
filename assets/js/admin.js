@@ -31,7 +31,11 @@ async approvals(ctx){
 
 async pandits(ctx){
   const [pn,us]=await Promise.all([load("pandits"),load("users")]);const um=Object.fromEntries(us.map(u=>[u.id,u]));const ap=pn.filter(p=>p.approved);
-  return [pageHead("Approved pandits",ap.length+" live on the site"),ap.length?ap.map(p=>panditCard(p,um[p.id],ctx)):empty({title:"No approved pandits yet",text:"Approve a profile to publish it."})]},
+  const sync=async()=>{try{const rs=(await F.getDocs(F.query(F.collection(db,"reviews"),F.limit(500)))).docs.map(d=>d.data()),agg={};
+      rs.forEach(r=>{const a=agg[r.panditId]||(agg[r.panditId]={s:0,n:0});a.s+=r.rating;a.n++});
+      const b=F.writeBatch(db);let n=0;ap.forEach(p=>{const a=agg[p.id];if(a){b.update(F.doc(db,"pandits",p.id),{rating:Math.round(a.s/a.n*100)/100,reviewCount:a.n});n++}});
+      if(n)await b.commit();toast(n?"Ratings updated for "+n+" pandit"+(n>1?"s":""):"No reviews to sync yet");ctx.render()}catch(e){toast("Could not sync ratings.","err")}};
+  return [pageHead("Approved pandits",ap.length+" live on the site",el("button",{class:"btn ghost",type:"button",onclick:sync},ic("star",16),"Sync ratings to public cards")),ap.length?ap.map(p=>panditCard(p,um[p.id],ctx)):empty({title:"No approved pandits yet",text:"Approve a profile to publish it."})]},
 
 async bookings(ctx){
   const [bk,pn]=await Promise.all([load("bookings"),load("pandits")]);bk.sort((a,b)=>tsMs(b.createdAt)-tsMs(a.createdAt));const ap=pn.filter(p=>p.approved);

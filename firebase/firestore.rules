@@ -72,6 +72,7 @@ service cloud.firestore {
         && d.services is list && d.services.size() > 0 && d.services.size() <= 40
         && optStr(d.price, 80) && d.experience is number && d.experience >= 0 && d.experience <= 80
         && optStr(d.whatsapp, 14) && optStr(d.bio, 500)
+        && (!('photoUrl' in d) || (d.photoUrl is string && d.photoUrl.size() <= 400 && (d.photoUrl == '' || d.photoUrl.matches('^https://[^ ]+$'))))
         && (!('unavailable' in d) || (d.unavailable is list && d.unavailable.size() <= 120));
     }
     match /pandits/{uid} {
@@ -79,7 +80,7 @@ service cloud.firestore {
       // a pandit can only create an UNAPPROVED profile, and only with a pandit account
       allow create: if isOwner(uid)
         && userDoc(uid).data.role == 'pandit'
-        && request.resource.data.keys().hasOnly(['name','city','languages','services','price','experience','whatsapp','bio','unavailable','approved','createdAt'])
+        && request.resource.data.keys().hasOnly(['name','city','languages','services','price','experience','whatsapp','bio','photoUrl','unavailable','approved','createdAt'])
         && panditShape()
         && request.resource.data.approved == false
         && request.resource.data.createdAt == request.time;
@@ -87,12 +88,14 @@ service cloud.firestore {
         // owner edits: cannot touch approved/review fields; an approved pandit cannot rename themself
         if (isOwner(uid) && panditShape()
             && ((resource.data.approved == false
-                  && changed().hasOnly(['name','city','languages','services','price','experience','whatsapp','bio','unavailable']))
+                  && changed().hasOnly(['name','city','languages','services','price','experience','whatsapp','bio','photoUrl','unavailable']))
              || (resource.data.approved == true
-                  && changed().hasOnly(['city','languages','services','price','experience','whatsapp','bio','unavailable']))))
+                  && changed().hasOnly(['city','languages','services','price','experience','whatsapp','bio','photoUrl','unavailable']))))
         // admin: approve / reject with a note, nothing else
-        || (isAdmin() && changed().hasOnly(['approved','reviewNote','reviewedAt'])
-            && optStr(request.resource.data.get('reviewNote',''), 300));
+        || (isAdmin() && changed().hasOnly(['approved','reviewNote','reviewedAt','rating','reviewCount'])
+            && optStr(request.resource.data.get('reviewNote',''), 300)
+            && (!('rating' in request.resource.data) || (request.resource.data.rating is number && request.resource.data.rating >= 0 && request.resource.data.rating <= 5))
+            && (!('reviewCount' in request.resource.data) || (request.resource.data.reviewCount is int && request.resource.data.reviewCount >= 0)));
       allow delete: if false;
     }
 

@@ -29,3 +29,11 @@ Admin rights can only be given by creating the `admins/<uid>` document in the co
 - Password reset and verification emails are sent by Firebase. To brand them: Authentication → Templates.
 - No Firestore rule changes were needed for v14. Existing users keep working.
 - **Replace the placeholder support contacts** in `assets/js/ui.js` (the `SUPPORT` constant at the bottom): WhatsApp number (country code, digits only), phone and email. They power the "Talk to us" button and the Help page in the customer dashboard. The website footer values come from `tools/build.py` (`PHONE`, `EMAIL`).
+
+## Public pandit directory (v14.3)
+- The home page section and `pages/pandits.html` list **approved** pandits live from Firestore (REST, no login). A pandit appears as soon as you approve the profile in the admin panel; if none are approved yet, the home section stays hidden and the Pandits page says profiles are coming soon.
+- **Re-deploy `firebase/firestore.rules`** (Firebase console > Firestore > Rules, or `firebase deploy --only firestore:rules`). It adds the optional `photoUrl` profile field (https links only) and lets the admin write `rating` and `reviewCount` on a pandit.
+- **Ratings on public cards:** reviews can only be read by signed-in users, so public cards show a rating only after you open Admin > Approved pandits > **Sync ratings to public cards** (it averages the reviews and stores the result on each pandit). Run it now and then. Pandits without a rating show a "New" badge.
+- **Photos:** pandits add a photo link on their Profile page; if they sign in with Google and leave it empty, their Google photo is used. Without a photo the card shows initials.
+- If you turn on **App Check enforcement** for Firestore, the public directory will stop loading (it makes plain REST calls). Leave enforcement off for Firestore, or tell me and I will add token support.
+- Preview the layout without any data: add `?demo=1` to the home page or the Pandits page (clearly labelled sample profiles).

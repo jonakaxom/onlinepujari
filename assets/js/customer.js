@@ -78,6 +78,7 @@ async book(ctx,q){
   const [pz,pandits,rt,favs,bks]=await Promise.all([pujas(),loadPandits(),ratings(),loadFavs(),q.again?loadBookings():Promise.resolve([])]);cache.pandits=pandits;
   const again=bks.find(b=>b.id===q.again);
   const d={puja:q.puja?pz.find(p=>p.slug===q.puja)?.name||"":again?.puja||"",mode:again?.mode||"home",date:"",time:"09:00",lang:again?.lang||(profile.lang||"Hindi"),city:again?.city||profile.city||"",samagri:again?.samagri||"pandit_only",panditId:"",panditName:"",address:again?.address||profile.address||"",notes:""};
+  const want=q.pandit||sessionStorage.getItem("op-book-pandit");sessionStorage.removeItem("op-book-pandit");const wp=want&&pandits.find(x=>x.id===want);if(wp){d.panditId=wp.id;d.panditName=wp.name}
   let step=d.puja?2:1;const box=el("div",{});
   const labels=["Puja","Details","Pandit","Confirm"];
   const bar=()=>el("ol",{class:"steps","aria-label":"Booking steps"},labels.map((l,i)=>el("li",{"data-n":i+1,class:i+1===step?"on":i+1<step?"done":"","aria-current":i+1===step?"step":null},l)));
