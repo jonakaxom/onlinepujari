@@ -45,8 +45,8 @@ export function ics(b){const d=b.date.replace(/-/g,""),t=b.time.replace(":","")+
 /* ---------- session + idle sign-out ---------- */
 export function boot(role){return new Promise(res=>{if(!configured){showSetup();return}
   onUser(async user=>{if(!user){location.href="login.html";return}
-    const snap=await F.getDoc(F.doc(db,"users",user.uid));if(!snap.exists()){location.href="login.html";return}
-    const profile=snap.data();let isAdmin=false;try{isAdmin=(await F.getDoc(F.doc(db,"admins",user.uid))).exists()}catch(e){}
+    const [snap,isAdmin]=await Promise.all([F.getDoc(F.doc(db,"users",user.uid)),F.getDoc(F.doc(db,"admins",user.uid)).then(d=>d.exists(),()=>false)]);if(!snap.exists()){location.href="login.html";return}
+    const profile=snap.data();
     const home=isAdmin?"admin.html":profile.role==="pandit"?"pandit.html":"dashboard.html";
     const ok=role==="admin"?isAdmin:role==="pandit"?(!isAdmin&&profile.role==="pandit"):(!isAdmin&&profile.role==="customer");
     if(!ok){location.href=home;return}

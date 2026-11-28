@@ -37,3 +37,9 @@ Admin rights can only be given by creating the `admins/<uid>` document in the co
 - **Photos:** pandits add a photo link on their Profile page; if they sign in with Google and leave it empty, their Google photo is used. Without a photo the card shows initials.
 - If you turn on **App Check enforcement** for Firestore, the public directory will stop loading (it makes plain REST calls). Leave enforcement off for Firestore, or tell me and I will add token support.
 - Preview the layout without any data: add `?demo=1` to the home page or the Pandits page (clearly labelled sample profiles).
+
+## v14.4: "We could not load pandits" and slow login
+- **Cause of the error:** `vercel.json` and `_headers` sent a Content-Security-Policy with `connect-src 'self'` for public pages. Browsers apply that header together with the page's own meta CSP, so the Firestore request was blocked even though the page allowed it. Both files now allow `https://firestore.googleapis.com` (and https photos). Redeploy to apply.
+- If it still fails, open the pandits page, press F12 > Console: the line `[pandits] could not load directory: ...` now shows the real reason (HTTP 403 = rules not published or API key referrer restriction; HTTP 404/400 = Firestore database not created).
+- **Demo pandits:** `node tools/seed-demo-pandits.mjs` creates 9 approved demo pandits (needs `tools/service-account.json`, see the top of the script). `--remove` deletes them. Remove them before real launch.
+- **Login speed:** Firebase modules are preloaded in parallel, the user and admin records are read at the same time, and Firestore auto-detects slow streaming networks.

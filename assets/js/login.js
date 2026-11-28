@@ -112,7 +112,7 @@ if(!configured)showSetup();else{
 
   onUser(async user=>{if(busy)return;
     if(!user){if(!shown)qs.get("mode")==="signup"?signUp():signIn();return}
-    const s=await F.getDoc(F.doc(db,"users",user.uid));if(!s.exists())return onboard(user);
-    let admin=false;try{admin=(await F.getDoc(F.doc(db,"admins",user.uid))).exists()}catch(e){}
+    const [s,admin]=await Promise.all([F.getDoc(F.doc(db,"users",user.uid)),F.getDoc(F.doc(db,"admins",user.uid)).then(d=>d.exists(),()=>false)]);
+    if(!s.exists())return onboard(user);
     go(s.data().role,admin)});
 }

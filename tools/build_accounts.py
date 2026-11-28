@@ -11,6 +11,7 @@ def page(fn,title,js):
 <title>{title} | Online Pujari</title><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="{CSP}"><meta name="theme-color" content="#fff7ec"><meta name="color-scheme" content="light dark"><script src="../assets/js/theme.js"></script>
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin><link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"><link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js"><link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"><link rel="modulepreload" href="../assets/js/firebase-config.js"><link rel="modulepreload" href="../assets/js/auth.js"><link rel="modulepreload" href="../assets/js/ui.js">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700&family=Eczar:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/dash.css"></head><body>

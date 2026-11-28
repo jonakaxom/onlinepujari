@@ -27,8 +27,9 @@ async function load(){
   const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),9000);
   try{const r=await fetch(`https://firestore.googleapis.com/v1/projects/${encodeURIComponent(C.projectId)}/databases/(default)/documents:runQuery?key=${encodeURIComponent(C.apiKey)}`,{method:"POST",headers:{"Content-Type":"application/json"},signal:ctl.signal,
       body:JSON.stringify({structuredQuery:{from:[{collectionId:"pandits"}],where:{fieldFilter:{field:{fieldPath:"approved"},op:"EQUAL",value:{booleanValue:true}}},limit:100}})});
-    if(!r.ok)throw new Error("HTTP "+r.status);
+    if(!r.ok){let m="";try{m=(await r.json()).error.message}catch(_){}throw new Error("Firestore HTTP "+r.status+(m?": "+m:""))}
     return (await r.json()).filter(x=>x.document).map(x=>clean(fromDoc(x.document)))}
+  catch(e){console.error("[pandits] could not load directory:",e);throw e}
   finally{clearTimeout(t)}}
 
 /* ---------- card ---------- */
